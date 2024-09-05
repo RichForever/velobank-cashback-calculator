@@ -66,17 +66,21 @@ The app will run on http://localhost:3000/
 ```
 cashback-calculator/
 ├── public/
+│   ├── favicon.ico
 │   ├── index.html
+│   ├── logo192.png
+│   ├── logo512.png
+│   ├── manifest.json
+│   ├── robots.txt
 ├── src/
-│   ├── components/
-│   │   ├── CalcForm.jsx   # Main form component for adding expenses
-│   │   └── PaymentsList.jsx  # Component for displaying the list of payments
-│   ├── hooks/
-│   │   └── useCashback.js   # Custom hook for handling cashback calculations
-│   ├── App.js           # Main app component
-│   ├── index.js         # Entry point for the app
+│   ├── CalcForm.jsx
+│   ├── index.css
+│   ├── index.js
+│   ├── VeloCashbackCalculator.js
+├── .gitignore
 ├── README.md
 ├── package.json
+├── package-lock.json
 └── .gitignore
 ```
 
