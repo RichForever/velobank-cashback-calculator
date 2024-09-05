@@ -176,7 +176,7 @@ function CalcForm() {
         }}
               direction="column">
             <Heading mb="16" textAlign="center"><Text display="inline-block" color="#00b140">VeloBank</Text> Cashback
-                Calculator</Heading>
+                Calculator v1.0</Heading>
             <Box width="100%"
                  maxWidth="1000px">
                 {error && (<Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
