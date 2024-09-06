@@ -26,7 +26,7 @@ import {
     Tooltip,
     useToast,
     useDisclosure,
-    useBreakpointValue
+    useBreakpointValue, Input
 } from '@chakra-ui/react';
 import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
@@ -57,7 +57,7 @@ function CalcForm() {
     const isSmallScreen = useBreakpointValue({base: true, lg: false});
 
     const handleAdd = () => {
-        const parsedValue = parseFloat(inputValue).toFixed(2);
+        const parsedValue = Number(parseFloat(inputValue).toFixed(2));
 
         if (isNaN(parsedValue) || inputValue === '') {
             setError(true);
@@ -229,19 +229,21 @@ function CalcForm() {
                                 <Box>
                                     <FormControl id="transaction-value" my="3">
                                         <FormLabel fontSize="sm">Wartość transakcji</FormLabel>
-                                        <NumberInput
-                                            precision={2}
-                                            value={inputValue} // Bind input value to state
-                                            onChange={(valueString) => setInputValue(valueString)} // Update state on change
+                                        <Input
+                                            type="number"
+                                            value={inputValue}
+                                            step="0.01"
+                                            onChange={(e) => setInputValue(e.target.value)}
                                             onKeyDown={handleKeyDown}
                                             isInvalid={error}
-                                        >
-                                            <NumberInputField ref={inputRef}/> {/* Attach ref to the input field */}
-                                        </NumberInput>
+                                            ref={inputRef}
+                                        />
                                     </FormControl>
                                     <Button backgroundColor='#00b140' color="white" _hover={{bg: '#029737'}}
                                             width="100%"
-                                            onClick={handleAdd}>Dodaj transakcję</Button>
+                                            onClick={handleAdd}
+                                            isDisabled={!inputValue}
+                                    >Dodaj transakcję</Button>
                                 </Box>
                             </VStack>
                             <Divider/>
@@ -275,7 +277,7 @@ function CalcForm() {
                                 </Heading>
                                 <Tooltip label='Wyczyść listę'>
                                     <IconButton size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>}
-                                                onClick={handleClear} isDisabled={payments.length === 0}/>
+                                                onClick={handleClear} isDisabled={payments.length === 0} />
                                 </Tooltip>
                             </Flex>
                             <Divider/>
@@ -308,13 +310,13 @@ function CalcForm() {
                             <Divider/>
                             <Box>
                                 <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg"
-                                      color={cashback >= CASHBACK_MAX_VALUE ? '#00b140' : 'black'}>
+                                      color="#00b140">
                                     <Text>Twój cashback</Text>
-                                    <Text>{cashback} PLN</Text>
+                                    <Text>{cashback.toFixed(2)} PLN</Text>
                                 </Flex>
                                 <Flex justifyContent="space-between" fontWeight="normal" fontSize="md">
                                     <Text>Do wydania zostało</Text>
-                                    <Text>{toSpend} PLN</Text>
+                                    <Text>{toSpend.toFixed(2)} PLN</Text>
                                 </Flex>
                             </Box>
                         </VStack>
