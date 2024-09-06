@@ -16,8 +16,6 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     CloseButton,
-    NumberInput,
-    NumberInputField,
     Heading,
     FormControl,
     FormLabel,
@@ -67,7 +65,7 @@ function CalcForm() {
         let cashbackValue = parseFloat((parsedValue * CASHBACK_PERCENTAGE_VALUE).toFixed(2));
 
         setPayments([...payments, {
-            id: uuidv4(), value: parsedValue, cashback: cashbackValue,
+            id: uuidv4(), value: parsedValue.toFixed(2), cashback: cashbackValue,
         }]);
 
         setCashback(parseFloat((cashback + cashbackValue).toFixed(2)));
@@ -324,6 +322,7 @@ function CalcForm() {
                     </Box>
                 </Flex>
             </Box>
+            <Text mt={6} fontSize="sm" color="#9ca5af">v1.0</Text>
         </Flex>
         <AlertDialog
             isOpen={isOpen}
