@@ -234,6 +234,7 @@ function CalcForm() {
                                             value={inputValue}
                                             step="0.01"
                                             onChange={(e) => setInputValue(e.target.value)}
+                                            onBlur={() => setInputValue(parseFloat(inputValue).toFixed(2))}
                                             onKeyDown={handleKeyDown}
                                             isInvalid={error}
                                             ref={inputRef}
