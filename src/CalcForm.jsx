@@ -402,8 +402,8 @@ function CalcForm() {
                         lg: 'row'
                     }}
                 >
-                    <Text m={0} fontSize="sm" color="#9ca5af">Wersja: 3.0</Text>
-                    <Text m={0} fontSize="sm" color="#9ca5af">Data ostatniej
+                    <Text m={0} fontSize="xs" color="#9ca5af">Wersja: 3.0</Text>
+                    <Text m={0} fontSize="xs" color="#9ca5af">Data ostatniej
                         operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
                 </Flex>
             </Box>
