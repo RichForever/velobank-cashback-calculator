@@ -1,63 +1,81 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
-    Button,
-    Box,
-    VStack,
-    Flex,
-    Text,
-    IconButton,
     Alert,
-    AlertIcon,
     AlertDialog,
-    AlertTitle,
     AlertDialogBody,
+    AlertDialogContent,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogContent,
     AlertDialogOverlay,
+    AlertIcon,
+    AlertTitle,
+    Box,
+    Button,
     CloseButton,
-    Heading,
+    Divider,
+    Flex,
     FormControl,
     FormLabel,
-    Divider,
+    Heading,
+    IconButton,
+    Input,
     Link,
+    Text,
     Tooltip,
-    useToast,
+    VStack,
+    useBreakpointValue,
     useDisclosure,
-    useBreakpointValue, Input
+    useToast
 } from '@chakra-ui/react';
-import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
+import { DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
 
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60;
 const CASHBACK_MAX_SPEND_VALUE = 1200;
+const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
 
 function CalcForm() {
-    const [payments, setPayments] = useState([]);
+    // Load from localStorage or set default values
+    const [payments, setPayments] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).payments : [];
+    });
+
+    const [cashback, setCashback] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).cashback : 0;
+    });
+
+    const [toSpend, setToSpend] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).toSpend : CASHBACK_MAX_SPEND_VALUE;
+    });
+
+    const [lastOperationDate, setLastOperationDate] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).lastOperationDate : null;
+    });
+
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [inputValue, setInputValue] = useState(''); // State to manage input value
     const [error, setError] = useState(false);
-    const [cashback, setCashback] = useState(0);
-    const [toSpend, setToSpend] = useState(CASHBACK_MAX_SPEND_VALUE);
     const inputRef = useRef(null); // Ref for the input field
     const errorAlertRef = useRef(null);
+
     // clear modal
     const {isOpen, onOpen, onClose} = useDisclosure();
     // single item delete modal
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure();
 
-    // global cancel btn
     const cancelRef = React.useRef()
     const toast = useToast();
-
-    // Detect if screen size is less than 'lg'
     const isSmallScreen = useBreakpointValue({base: true, lg: false});
 
     const handleAdd = () => {
         const parsedValue = Number(parseFloat(inputValue).toFixed(2));
 
-        if (isNaN(parsedValue) || inputValue === '') {
+        if (isNaN(parsedValue) || inputValue === '' || parsedValue <= 0) {
             setError(true);
             return;
         }
@@ -71,7 +89,16 @@ function CalcForm() {
         setCashback(parseFloat((cashback + cashbackValue).toFixed(2)));
         setToSpend(parseFloat((toSpend - parsedValue).toFixed(2)));
 
-        showToast('item-added-success', "Pozycja dodana", "success")
+        setLastOperationDate(new Date().toLocaleString('pl-PL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }));
+
+        showToast('item-added-success', "Pozycja dodana", "info")
 
         setInputValue(''); // Clear the input field by setting state
 
@@ -94,6 +121,15 @@ function CalcForm() {
         // Increase the toSpend value by the deleted payment's value
         setToSpend((prevToSpend) => parseFloat((prevToSpend + parseFloat(selectedPayment.value)).toFixed(2)));
 
+        setLastOperationDate(new Date().toLocaleString('pl-PL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }));
+
         // Clear the selected payment after deletion
         setSelectedPayment(null);
 
@@ -101,6 +137,8 @@ function CalcForm() {
         onDeleteClose();
 
         showToast("item-deleted-success", "Pozycja usunięta", "info");
+
+
 
         // Refocus the input field
         if (!isSmallScreen && inputRef.current) {
@@ -118,6 +156,16 @@ function CalcForm() {
         setError(false);
         setCashback(0);
         setToSpend(CASHBACK_MAX_SPEND_VALUE);
+
+        setLastOperationDate(new Date().toLocaleString('pl-PL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }));
+
         onClose();
         showToast("clear-success", "Lista wydatków została wyczyszczona.", "info")
 
@@ -129,7 +177,7 @@ function CalcForm() {
 
     const handleCloseAlert = () => setError(false);
 
-    const showToast = (id, message, type = 'success') => {
+    const showToast = useCallback((id, message, type = 'success') => {
         if (!toast.isActive(id)) {
             toast({
                 id,
@@ -141,7 +189,7 @@ function CalcForm() {
                 position: 'bottom-right',
             })
         }
-    }
+    }, [toast])
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -165,7 +213,13 @@ function CalcForm() {
         if (cashback >= CASHBACK_MAX_VALUE) {
             showToast("cashback-success", "Wygląda na to, że spełniłeś wszystkie warunki aby otrzymać pełną kwotę cashbacku.", "success")
         }
-    }, [cashback])
+    }, [cashback, showToast])
+
+    // Save data to localStorage when payments, cashback, or toSpend changes
+    useEffect(() => {
+        const data = { payments, cashback, toSpend, lastOperationDate };
+        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
+    }, [payments, cashback, toSpend, lastOperationDate]);
 
     return (<>
         <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg="#EDF2F7" padding={{
@@ -241,7 +295,7 @@ function CalcForm() {
                                     <Button backgroundColor='#00b140' color="white" _hover={{bg: '#029737'}}
                                             width="100%"
                                             onClick={handleAdd}
-                                            isDisabled={!inputValue}
+                                            isDisabled={!inputValue || isNaN(Number(inputValue)) || error}
                                     >Dodaj transakcję</Button>
                                 </Box>
                             </VStack>
@@ -321,8 +375,24 @@ function CalcForm() {
                         </VStack>
                     </Box>
                 </Flex>
+                <Flex
+                    mt={6}
+                    alignItems="center"
+                    justifyContent={{
+                        base: 'center',
+                        lg: 'space-between'
+                    }}
+                    width="100%"
+                    direction={{
+                        base: 'column',
+                        lg: 'row'
+                    }}
+                >
+                    <Text m={0} fontSize="sm" color="#9ca5af">Wersja: 2.0</Text>
+                    <Text m={0} fontSize="sm" color="#9ca5af">Data ostatniej
+                        operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
+                </Flex>
             </Box>
-            <Text mt={6} fontSize="sm" color="#9ca5af">v1.0</Text>
         </Flex>
         <AlertDialog
             isOpen={isOpen}
