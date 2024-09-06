@@ -27,8 +27,8 @@ import {
     useDisclosure,
     useToast
 } from '@chakra-ui/react';
-import { DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
+import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
+import {v4 as uuidv4} from 'uuid';
 
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60;
@@ -139,7 +139,6 @@ function CalcForm() {
         showToast("item-deleted-success", "Pozycja usunięta", "info");
 
 
-
         // Refocus the input field
         if (!isSmallScreen && inputRef.current) {
             inputRef.current.focus();
@@ -217,7 +216,7 @@ function CalcForm() {
 
     // Save data to localStorage when payments, cashback, or toSpend changes
     useEffect(() => {
-        const data = { payments, cashback, toSpend, lastOperationDate };
+        const data = {payments, cashback, toSpend, lastOperationDate};
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
     }, [payments, cashback, toSpend, lastOperationDate]);
 
@@ -227,7 +226,7 @@ function CalcForm() {
             lg: "24px"
         }}
               direction="column">
-            <Heading mb="16" textAlign="center"><Text display="inline-block" color="#00b140">VeloBank</Text> Cashback
+            <Heading mb="16" textAlign="center"><Text display="inline-block" color="#00b13f">VeloBank</Text> Cashback
                 Calculator</Heading>
             <Box width="100%"
                  maxWidth="1000px">
@@ -235,15 +234,13 @@ function CalcForm() {
                     <Flex align='center' justifyContent='space-between' grow={1}>
                         <Flex>
                             <AlertIcon/>
-                            <AlertTitle color="#c53030" fontWeight="semibold">Pole nie może być
-                                puste</AlertTitle>
+                            <AlertTitle color="#c53030" fontWeight="semibold">Pole nie może być puste</AlertTitle>
                         </Flex>
                         <CloseButton onClick={handleCloseAlert}/>
                     </Flex>
                 </Alert>)}
                 <Flex
                     bg="white"
-                    p="20px"
                     borderRadius="8px"
                     boxShadow="xl"
                     justifyContent="space-between"
@@ -264,10 +261,16 @@ function CalcForm() {
                         lg: 'row'
                     }}
                 >
-                    <Box width={{
-                        base: '100%',
-                        lg: '60%'
-                    }}>
+                    <Box
+                        width={{
+                            base: '100%',
+                            lg: '50%'
+                        }}
+                        p={{
+                            base: '26px',
+                            lg: '32px'
+                        }}
+                    >
                         <VStack alignItems="stretch" gap="6">
                             <VStack gap="2" alignItems="stretch">
                                 <Box>
@@ -292,7 +295,7 @@ function CalcForm() {
                                             ref={inputRef}
                                         />
                                     </FormControl>
-                                    <Button backgroundColor='#00b140' color="white" _hover={{bg: '#029737'}}
+                                    <Button backgroundColor='#00b13f' color="white" _hover={{bg: '#029737'}}
                                             width="100%"
                                             onClick={handleAdd}
                                             isDisabled={!inputValue || isNaN(Number(inputValue)) || error}
@@ -310,16 +313,27 @@ function CalcForm() {
                                     9 miesięcy bank zwróci 5% wartości płatności bezgotówkowych kartą, telefonem lub
                                     BLIKIEM, maksymalnie do 540 zł. W promocji mogą wziąć osoby, które nie posiadały
                                     konta w VeloBanku w ostatnim czasie.</Text>
-                                <Link color="#00b140" display="inline-block"
+                                <Link color="#00b13f" display="inline-block"
                                       href="https://www.velobank.pl/klienci-indywidualni/biuro-prasowe/nowa-oferta-velobanku-60-zl-na-start-i-do-540-zl-zwrotu-za-zakupy.html"
                                       isExternal>Przeczytaj więcej o promocji</Link>
                             </VStack>
                         </VStack>
                     </Box>
-                    <Box width={{
-                        base: '100%',
-                        lg: '35%'
-                    }} bg="#F7FAFC" p="20px" borderRadius="8px">
+                    <Box
+                        width={{
+                            base: '100%',
+                            lg: '45%'
+                        }}
+                        bg="#F7FAFC"
+                        p={{
+                            base: '26px',
+                            lg: '32px'
+                        }}
+                        borderRadius={{
+                            base: '0 0 8px 8px',
+                            lg: '0 8px 8px 0'
+                        }}
+                    >
                         <VStack gap="6" alignItems="stretch" height={{
                             base: '400px',
                             lg: '100%'
@@ -330,7 +344,7 @@ function CalcForm() {
                                 </Heading>
                                 <Tooltip label='Wyczyść listę'>
                                     <IconButton size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>}
-                                                onClick={handleClear} isDisabled={payments.length === 0} />
+                                                onClick={handleClear} isDisabled={payments.length === 0}/>
                                 </Tooltip>
                             </Flex>
                             <Divider/>
@@ -345,7 +359,7 @@ function CalcForm() {
                                                     <Text fontSize="lg"
                                                           fontWeight="semibold">{payment.value} PLN</Text>
                                                     <Text fontSize='sm'
-                                                          color='#00b140'>{payment.cashback} PLN</Text>
+                                                          color='#00b13f'>{payment.cashback} PLN</Text>
                                                 </div>
                                                 <Flex gap={4} align='stretch'>
                                                     <Tooltip label='Usuń pozycję'>
@@ -358,16 +372,16 @@ function CalcForm() {
                                                 </Flex>
                                             </Flex>))}
                                     </VStack>
-                                </> : <Text>Brak danych do wyświetlenia</Text>}
+                                </> : <Text color="#9ca5af">Brak danych do wyświetlenia</Text>}
                             </Flex>
                             <Divider/>
                             <Box>
                                 <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg"
-                                      color="#00b140">
+                                      color="#00b13f">
                                     <Text>Twój cashback</Text>
                                     <Text>{cashback.toFixed(2)} PLN</Text>
                                 </Flex>
-                                <Flex justifyContent="space-between" fontWeight="normal" fontSize="md">
+                                <Flex justifyContent="space-between" fontWeight="normal" fontSize="md" color="#9ca5af">
                                     <Text>Do wydania zostało</Text>
                                     <Text>{toSpend.toFixed(2)} PLN</Text>
                                 </Flex>
@@ -388,7 +402,7 @@ function CalcForm() {
                         lg: 'row'
                     }}
                 >
-                    <Text m={0} fontSize="sm" color="#9ca5af">Wersja: 2.0</Text>
+                    <Text m={0} fontSize="sm" color="#9ca5af">Wersja: 3.0</Text>
                     <Text m={0} fontSize="sm" color="#9ca5af">Data ostatniej
                         operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
                 </Flex>
