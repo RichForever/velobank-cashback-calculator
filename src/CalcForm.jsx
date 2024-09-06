@@ -361,7 +361,10 @@ function CalcForm() {
             isCentered={true}
         >
             <AlertDialogOverlay>
-                <AlertDialogContent>
+                <AlertDialogContent margin={{
+                    base: '0 1rem',
+                    lg: ''
+                }}>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
                         Usuń pozycję?
                     </AlertDialogHeader>
