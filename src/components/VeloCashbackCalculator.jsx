@@ -13,7 +13,7 @@ const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const APP_VERSION = '3.1';
+const APP_VERSION = '3.2';
 
 function VeloCashbackCalculator() {
 
