@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/velobank-cashback-calculator/static/css/main.eae8ca0e.css",
-    "main.js": "/velobank-cashback-calculator/static/js/main.f7b1a5ae.js",
+    "main.js": "/velobank-cashback-calculator/static/js/main.d9de7959.js",
     "index.html": "/velobank-cashback-calculator/index.html",
     "main.eae8ca0e.css.map": "/velobank-cashback-calculator/static/css/main.eae8ca0e.css.map",
-    "main.f7b1a5ae.js.map": "/velobank-cashback-calculator/static/js/main.f7b1a5ae.js.map"
+    "main.d9de7959.js.map": "/velobank-cashback-calculator/static/js/main.d9de7959.js.map"
   },
   "entrypoints": [
     "static/css/main.eae8ca0e.css",
-    "static/js/main.f7b1a5ae.js"
+    "static/js/main.d9de7959.js"
   ]
 }
