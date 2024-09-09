@@ -13,30 +13,63 @@ const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const APP_VERSION = '3.2';
+const defaultState = {
+    transactions: [],
+    accumulatedCashback: 0,
+    remainingSpendLimit: 1200.00,
+    lastOperationDate: null
+};
+
+const isValidLocalStorageData = (data) => {
+    if (!data) return false;
+
+    const hasValidTransactions = Array.isArray(data.transactions);
+    const hasValidCashback = typeof data.accumulatedCashback === 'number';
+    const hasValidSpendLimit = typeof data.remainingSpendLimit === 'number';
+    const hasValidLastOperationDate = data.lastOperationDate === null || typeof data.lastOperationDate === 'string';
+
+    return hasValidTransactions && hasValidCashback && hasValidSpendLimit && hasValidLastOperationDate;
+};
+
+const APP_VERSION = '3.3';
 
 function VeloCashbackCalculator() {
 
-    // Load state from localStorage (transactions, cashback, spend limit, etc.)
-    const [transactions, setTransactions] = useState(() => {
-        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).transactions : [];
-    });
+    const [transactions, setTransactions] = useState([]);
+    const [accumulatedCashback, setAccumulatedCashback] = useState(0);
+    const [remainingSpendLimit, setRemainingSpendLimit] = useState(1200);
+    const [lastOperationDate, setLastOperationDate] = useState(null);
 
-    const [accumulatedCashback, setAccumulatedCashback] = useState(() => {
+    useEffect(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).accumulatedCashback : 0;
-    });
 
-    const [remainingSpendLimit, setRemainingSpendLimit] = useState(() => {
-        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).remainingSpendLimit : CASHBACK_MAX_SPEND_VALUE;
-    });
+        // If data exists, validate it
+        if (savedData) {
+            try {
+                const parsedData = JSON.parse(savedData);
 
-    const [lastOperationDate, setLastOperationDate] = useState(() => {
-        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).lastOperationDate : null;
-    });
+                // If valid data, set the state, otherwise reset localStorage
+                if (isValidLocalStorageData(parsedData)) {
+                    setTransactions(parsedData.transactions);
+                    setAccumulatedCashback(parsedData.accumulatedCashback);
+                    setRemainingSpendLimit(parsedData.remainingSpendLimit);
+                    setLastOperationDate(parsedData.lastOperationDate);
+                } else {
+                    console.warn('Invalid localStorage data structure. Resetting data...');
+                    localStorage.removeItem(LOCALSTORAGE_KEY);
+                    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
+                }
+            } catch (error) {
+                // In case of JSON parsing errors, reset localStorage
+                console.error('Error parsing localStorage data. Resetting data...', error);
+                localStorage.removeItem(LOCALSTORAGE_KEY);
+                localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
+            }
+        } else {
+            // If no data exists, set default values
+            localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
+        }
+    }, []);
 
     const [selectedPayment, setSelectedPayment] = useState(null); // Selected transaction for deletion
     const [transactionAmount, setTransactionAmount] = useState(''); // Current transaction amount input
