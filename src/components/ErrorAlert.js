@@ -1,7 +1,11 @@
 import React from "react";
 import {Alert, AlertIcon, AlertTitle, CloseButton, Flex} from "@chakra-ui/react";
 
-const ErrorAlert = ({ inputError, errorAlertRef, handleCloseAlert }) => {
+const ErrorAlert = ({ errorAlertRef, setInputError }) => {
+
+    // Function to close input error alert
+    const handleCloseAlert = () => setInputError(false);
+
     return (
         <Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
             <Flex align='center' justifyContent='space-between' grow={1}>
