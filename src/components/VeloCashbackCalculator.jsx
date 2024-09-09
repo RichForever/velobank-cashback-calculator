@@ -29,26 +29,29 @@ import {
 } from '@chakra-ui/react';
 import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
 
+// Constants defining cashback rules and local storage key
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
-const CASHBACK_MAX_VALUE = 60;
-const CASHBACK_MAX_SPEND_VALUE = 1200;
+const CASHBACK_MAX_VALUE = 60.00;
+const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
+const APP_VERSION = '3.1';
 
-function CalcForm() {
-    // Load from localStorage or set default values
-    const [payments, setPayments] = useState(() => {
+function VeloCashbackCalculator() {
+
+    // Load state from localStorage (transactions, cashback, spend limit, etc.)
+    const [transactions, setTransactions] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).payments : [];
+        return savedData ? JSON.parse(savedData).transactions : [];
     });
 
-    const [cashback, setCashback] = useState(() => {
+    const [accumulatedCashback, setAccumulatedCashback] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).cashback : 0;
+        return savedData ? JSON.parse(savedData).accumulatedCashback : 0;
     });
 
-    const [toSpend, setToSpend] = useState(() => {
+    const [remainingSpendLimit, setRemainingSpendLimit] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        return savedData ? JSON.parse(savedData).toSpend : CASHBACK_MAX_SPEND_VALUE;
+        return savedData ? JSON.parse(savedData).remainingSpendLimit : CASHBACK_MAX_SPEND_VALUE;
     });
 
     const [lastOperationDate, setLastOperationDate] = useState(() => {
@@ -56,38 +59,48 @@ function CalcForm() {
         return savedData ? JSON.parse(savedData).lastOperationDate : null;
     });
 
-    const [selectedPayment, setSelectedPayment] = useState(null);
-    const [inputValue, setInputValue] = useState(''); // State to manage input value
-    const [error, setError] = useState(false);
-    const inputRef = useRef(null); // Ref for the input field
-    const errorAlertRef = useRef(null);
+    const [selectedPayment, setSelectedPayment] = useState(null); // Selected transaction for deletion
+    const [transactionAmount, setTransactionAmount] = useState(''); // Current transaction amount input
+    const [inputError, setInputError] = useState(false); // Error state for invalid input
+    const inputRef = useRef(null); // Ref for the input element
+    const errorAlertRef = useRef(null); // Ref for error alert
 
-    // clear modal
-    const {isOpen, onOpen, onClose} = useDisclosure();
-    // single item delete modal
-    const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure(); // Disclosure for clear confirmation dialog
+    const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure(); // Disclosure for delete confirmation dialog
 
     const cancelRef = React.useRef()
-    const toast = useToast();
-    const isSmallScreen = useBreakpointValue({base: true, lg: false});
+    const toast = useToast(); // Toast notifications for user feedback
+    const isSmallScreen = useBreakpointValue({base: true, lg: false}); // Responsive design breakpoint
 
-    const handleAdd = () => {
-        const parsedValue = Number(parseFloat(inputValue).toFixed(2));
+    // Function to add a new transaction
+    const addTransaction = () => {
+        const transactionInputValue = parseFloat(transactionAmount);
 
-        if (isNaN(parsedValue) || inputValue === '' || parsedValue <= 0) {
-            setError(true);
+        // Validate transaction amount
+        if (!transactionAmount || isNaN(transactionInputValue)) {
+            setInputError(true);
             return;
         }
 
-        let cashbackValue = parseFloat((parsedValue * CASHBACK_PERCENTAGE_VALUE).toFixed(2));
+        // Calculate cashback for the transaction
+        let calculatedCashback = parseFloat((transactionInputValue * CASHBACK_PERCENTAGE_VALUE).toFixed(2));
+        let parsedTransactionValue = parseFloat(transactionInputValue.toFixed(2));
 
-        setPayments([...payments, {
-            id: Date.now(), value: parsedValue.toFixed(2), cashback: cashbackValue,
+        // Update transactions state with the new transaction
+        setTransactions([...transactions, {
+            id: Date.now(),
+            value: parsedTransactionValue,
+            cashback: calculatedCashback,
         }]);
 
-        setCashback(parseFloat((cashback + cashbackValue).toFixed(2)));
-        setToSpend(parseFloat((toSpend - parsedValue).toFixed(2)));
+        // Update accumulated cashback and remaining spend limit
+        let updatedAccumulatedCashback = parseFloat((accumulatedCashback + calculatedCashback).toFixed(2));
+        setAccumulatedCashback(updatedAccumulatedCashback);
 
+        let updatedRemainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
+        setRemainingSpendLimit(updatedRemainingSpendLimit);
+
+        // Set the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
             day: '2-digit',
             month: '2-digit',
@@ -97,29 +110,36 @@ function CalcForm() {
             second: '2-digit'
         }));
 
+        // Show toast notification for added transaction
         showToast('item-added-success', "Pozycja dodana", "info")
 
-        setInputValue(''); // Clear the input field by setting state
+        // Clear transaction input field
+        setTransactionAmount('');
 
+        // Refocus input field if not on small screen
         if (!isSmallScreen && inputRef.current) {
             inputRef.current.focus();
         }
     };
 
-    const handleDelete = (payment) => {
-        setSelectedPayment(payment); // Set the payment to delete
-        onDeleteOpen(); // Open the alert dialog
+    // Prompt user to confirm deletion of a transaction
+    const promptDeleteTransaction = (payment) => {
+        setSelectedPayment(payment);
+        onDeleteOpen();
     };
-    const confirmDelete = () => {
-        const {id, cashback} = selectedPayment;
-        setPayments(payments.filter((payment) => payment.id !== id));
 
-        // Subtract the cashback value from the total cashback
-        setCashback((prevCashback) => parseFloat((prevCashback - cashback).toFixed(2)));
+    // Function to delete a transaction
+    const deleteTransaction = () => {
+        const { id, cashback, value } = selectedPayment;
+        const updatedTransactions = transactions.filter((payment) => payment.id !== id)
 
-        // Increase the toSpend value by the deleted payment's value
-        setToSpend((prevToSpend) => parseFloat((prevToSpend + parseFloat(selectedPayment.value)).toFixed(2)));
+        setTransactions(updatedTransactions);
 
+        // Adjust accumulated cashback and remaining spend limit
+        setAccumulatedCashback((prevAccumulatedCashback) => parseFloat((prevAccumulatedCashback - cashback).toFixed(2)));
+        setRemainingSpendLimit((prevRemainingSpendLimit) => parseFloat((prevRemainingSpendLimit + parseFloat(value)).toFixed(2)));
+
+        // Update the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
             day: '2-digit',
             month: '2-digit',
@@ -129,31 +149,31 @@ function CalcForm() {
             second: '2-digit'
         }));
 
-        // Clear the selected payment after deletion
         setSelectedPayment(null);
 
-        // Close the dialog
         onDeleteClose();
 
+        // Show toast notification for deleted transaction
         showToast("item-deleted-success", "Pozycja usunięta", "info");
 
-
-        // Refocus the input field
+        // Refocus input field if not on small screen
         if (!isSmallScreen && inputRef.current) {
             inputRef.current.focus();
         }
     };
 
+    // Show confirmation dialog to clear all transactions
     const handleClear = () => {
-        onOpen(); // Show the confirmation dialog
+        onOpen();
     };
 
-    const confirmClear = () => {
-        setPayments([]);
-        setInputValue('');
-        setError(false);
-        setCashback(0);
-        setToSpend(CASHBACK_MAX_SPEND_VALUE);
+    // Function to clear all transactions
+    const clearAllTransactions = () => {
+        setTransactions([]);
+        setTransactionAmount('');
+        setInputError(false);
+        setAccumulatedCashback(0);
+        setRemainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
 
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
             day: '2-digit',
@@ -173,8 +193,10 @@ function CalcForm() {
 
     };
 
-    const handleCloseAlert = () => setError(false);
+    // Function to close input error alert
+    const handleCloseAlert = () => setInputError(false);
 
+    // Function to show toast notifications
     const showToast = useCallback((id, message, type = 'success') => {
         if (!toast.isActive(id)) {
             toast({
@@ -189,37 +211,41 @@ function CalcForm() {
         }
     }, [toast])
 
+    // Handle Enter key press to add transaction
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            handleAdd();
+            addTransaction();
         }
     };
 
+    // Scroll to error alert on small screens if there's an input error
     useEffect(() => {
         if (isSmallScreen && errorAlertRef.current) {
             errorAlertRef.current.scrollIntoView({behavior: 'smooth', block: 'center'});
         }
-    }, [error, isSmallScreen])
+    }, [inputError, isSmallScreen])
 
+    // Reset input error when transactions change
     useEffect(() => {
-        console.log(payments)
-        if (payments.length > 0) {
-            setError(false);
+        if (transactions.length > 0) {
+            setInputError(false);
         }
-    }, [payments]);
+    }, [transactions]);
 
+    // Show a toast notification when cashback reaches the maximum value
     useEffect(() => {
-        if (cashback >= CASHBACK_MAX_VALUE) {
+        if (accumulatedCashback >= CASHBACK_MAX_VALUE) {
             showToast("cashback-success", "Wygląda na to, że spełniłeś wszystkie warunki aby otrzymać pełną kwotę cashbacku.", "success")
         }
-    }, [cashback, showToast])
+    }, [accumulatedCashback, showToast])
 
-    // Save data to localStorage when payments, cashback, or toSpend changes
+    // Save current data to localStorage when relevant state changes
     useEffect(() => {
-        const data = {payments, cashback, toSpend, lastOperationDate};
+        const data = { lastOperationDate, accumulatedCashback, remainingSpendLimit, transactions };
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
-    }, [payments, cashback, toSpend, lastOperationDate]);
+    }, [lastOperationDate, accumulatedCashback, remainingSpendLimit, transactions ]);
 
+    // Render the component UI
     return (<>
         <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg="#EDF2F7" padding={{
             base: "64px 24px",
@@ -230,7 +256,7 @@ function CalcForm() {
                 Calculator</Heading>
             <Box width="100%"
                  maxWidth="1000px">
-                {error && (<Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
+                {inputError && (<Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
                     <Flex align='center' justifyContent='space-between' grow={1}>
                         <Flex>
                             <AlertIcon/>
@@ -286,19 +312,19 @@ function CalcForm() {
                                         <FormLabel fontSize="sm">Wartość transakcji</FormLabel>
                                         <Input
                                             type="number"
-                                            value={inputValue}
+                                            value={transactionAmount || ''}
                                             step="0.01"
-                                            onChange={(e) => setInputValue(e.target.value)}
-                                            onBlur={() => setInputValue(parseFloat(inputValue).toFixed(2))}
+                                            onChange={(e) => setTransactionAmount(e.target.value)}
+                                            onBlur={() => setTransactionAmount(parseFloat(transactionAmount).toFixed(2))}
                                             onKeyDown={handleKeyDown}
-                                            isInvalid={error}
+                                            isInvalid={inputError}
                                             ref={inputRef}
                                         />
                                     </FormControl>
                                     <Button backgroundColor='#00b13f' color="white" _hover={{bg: '#029737'}}
                                             width="100%"
-                                            onClick={handleAdd}
-                                            isDisabled={!inputValue || isNaN(Number(inputValue)) || error}
+                                            onClick={addTransaction}
+                                            isDisabled={!transactionAmount || isNaN(Number(transactionAmount)) || inputError}
                                     >Dodaj transakcję</Button>
                                 </Box>
                             </VStack>
@@ -344,15 +370,15 @@ function CalcForm() {
                                 </Heading>
                                 <Tooltip label='Wyczyść listę'>
                                     <IconButton size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>}
-                                                onClick={handleClear} isDisabled={payments.length === 0}/>
+                                                onClick={handleClear} isDisabled={transactions.length === 0}/>
                                 </Tooltip>
                             </Flex>
                             <Divider/>
-                            <Flex height="100%" alignItems={payments.length > 0 ? 'flex-start' : 'center'}
+                            <Flex height="100%" alignItems={transactions.length > 0 ? 'flex-start' : 'center'}
                                   justifyContent="center" flex="1" overflowY="auto">
-                                {payments.length > 0 ? <>
+                                {transactions.length > 0 ? <>
                                     <VStack spacing={4} align='stretch' width="100%">
-                                        {payments.map((payment) => (
+                                        {transactions.map((payment) => (
                                             <Flex alignItems='center' justifyContent='space-between' gap={4}
                                                   key={payment.id}>
                                                 <div>
@@ -366,7 +392,7 @@ function CalcForm() {
                                                         <IconButton aria-label='Usuń pozycję'
                                                                     icon={<DeleteIcon/>}
                                                                     colorScheme="red" size="sm"
-                                                                    onClick={() => handleDelete(payment)}
+                                                                    onClick={() => promptDeleteTransaction(payment)}
                                                         />
                                                     </Tooltip>
                                                 </Flex>
@@ -379,11 +405,11 @@ function CalcForm() {
                                 <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg"
                                       color="#00b13f">
                                     <Text>Twój cashback</Text>
-                                    <Text>{cashback.toFixed(2)} PLN</Text>
+                                    <Text>{accumulatedCashback.toFixed(2)} PLN</Text>
                                 </Flex>
                                 <Flex justifyContent="space-between" fontWeight="normal" fontSize="md" color="#9ca5af">
                                     <Text>Do wydania zostało</Text>
-                                    <Text>{toSpend.toFixed(2)} PLN</Text>
+                                    <Text>{remainingSpendLimit.toFixed(2)} PLN</Text>
                                 </Flex>
                             </Box>
                         </VStack>
@@ -402,9 +428,8 @@ function CalcForm() {
                         lg: 'row'
                     }}
                 >
-                    <Text m={0} fontSize="xs" color="#9ca5af">Wersja: 3.0</Text>
-                    <Text m={0} fontSize="xs" color="#9ca5af">Data ostatniej
-                        operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
+                    <Text m={0} fontSize="xs" color="#9ca5af">Wersja: { APP_VERSION }</Text>
+                    <Text m={0} fontSize="xs" color="#9ca5af">Data ostatniej operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
                 </Flex>
             </Box>
         </Flex>
@@ -431,7 +456,7 @@ function CalcForm() {
                         <Button ref={cancelRef} onClick={onClose}>
                             Anuluj
                         </Button>
-                        <Button colorScheme="red" onClick={confirmClear} ml={3}>
+                        <Button colorScheme="red" onClick={clearAllTransactions} ml={3}>
                             Wyczyść
                         </Button>
                     </AlertDialogFooter>
@@ -461,7 +486,7 @@ function CalcForm() {
                         <Button ref={cancelRef} onClick={onDeleteClose}>
                             Anuluj
                         </Button>
-                        <Button colorScheme="red" onClick={confirmDelete} ml={3}>
+                        <Button colorScheme="red" onClick={deleteTransaction} ml={3}>
                             Usuń
                         </Button>
                     </AlertDialogFooter>
@@ -472,4 +497,4 @@ function CalcForm() {
     </>)
 }
 
-export default CalcForm;
+export default VeloCashbackCalculator;
