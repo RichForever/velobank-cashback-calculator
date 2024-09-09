@@ -1,33 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {
-    Alert,
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay,
-    AlertIcon,
-    AlertTitle,
-    Box,
-    Button,
-    CloseButton,
-    Divider,
-    Flex,
-    FormControl,
-    FormLabel,
-    Heading,
-    IconButton,
-    Input,
-    Link,
-    Text,
-    Tooltip,
-    VStack,
-    useBreakpointValue,
-    useDisclosure,
-    useToast
-} from '@chakra-ui/react';
-import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
+import { Box, Flex, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import CalculatorForm from './CalculatorForm/CalculatorForm';
+import Transactions from "./Transactions/Transactions";
+import Footer from './Footer';
+import Header from './Header';
+import ErrorAlert from "./ErrorAlert";
+import ClearAllTransactionsAlert from "./Alerts/ClearAllTransactionsAlert";
+import DeleteTransactionAlert from "./Alerts/DeleteTransactionAlert";
 
 // Constants defining cashback rules and local storage key
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
@@ -248,165 +227,19 @@ function VeloCashbackCalculator() {
     // Render the component UI
     return (<>
         <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg="#EDF2F7" padding={{ base: "64px 24px", lg: "24px" }} direction="column">
-            <Heading mb="16" textAlign="center">
-                <Text display="inline-block" color="#00b13f">VeloBank</Text> Cashback Calculator
-            </Heading>
+            <Header />
             <Box width="100%" maxWidth="1000px">
-                {inputError && (
-                    <Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
-                        <Flex align='center' justifyContent='space-between' grow={1}>
-                            <Flex>
-                                <AlertIcon/>
-                                <AlertTitle color="#c53030" fontWeight="semibold">Pole nie może być puste</AlertTitle>
-                            </Flex>
-                            <CloseButton onClick={handleCloseAlert}/>
-                        </Flex>
-                    </Alert>
-                )}
-                <Flex
-                    bg="white"
-                    borderRadius="8px"
-                    boxShadow="xl"
-                    justifyContent="space-between"
-                    gap={{ base: '6', lg: '' }}
-                    maxHeight={{ base: '100%', lg: '600px' }}
-                    height={{ base: '100%', lg: '600px' }}
-                    direction={{ base: 'column', lg: 'row' }}
-                >
-                    <Box
-                        width={{ base: '100%', lg: '50%' }}
-                        p={{ base: '26px', lg: '32px' }}
-                    >
-                        <VStack alignItems="stretch" gap="6">
-                            <VStack gap="2" alignItems="stretch">
-                                <Box>
-                                    <Heading size="md" mb="2">Dodaj swoje transakcje i sprawdź wartość cashbacku </Heading>
-                                    <Text color="#4A5568" fontSize="base">Kalkulator umożliwia obliczenie wartości spodziewanego cashbacku od danej transakcji.</Text>
-                                </Box>
-                                <Box>
-                                    <FormControl id="transaction-value" my="3">
-                                        <FormLabel fontSize="sm">Wartość transakcji</FormLabel>
-                                        <Input
-                                            type="number"
-                                            value={transactionAmount || ''}
-                                            step="0.01"
-                                            onChange={(e) => setTransactionAmount(e.target.value)}
-                                            onBlur={() => setTransactionAmount(parseFloat(transactionAmount).toFixed(2))}
-                                            onKeyDown={handleKeyDown}
-                                            isInvalid={inputError}
-                                            ref={inputRef}
-                                        />
-                                    </FormControl>
-                                    <Button backgroundColor='#00b13f' color="white" _hover={{bg: '#029737'}}
-                                            width="100%"
-                                            onClick={addTransaction}
-                                            isDisabled={!transactionAmount || isNaN(Number(transactionAmount)) || inputError}
-                                    >Dodaj transakcję</Button>
-                                </Box>
-                            </VStack>
-                            <Divider/>
-                            <VStack fontSize="sm" gap="4" alignItems="stretch">
-                                <Text color="#4A5568">VeloBank wprowadza nową promocję, w której nowi klienci mogą zyskać nawet do 600 zł. Wystarczy otworzyć VeloKonto wraz z VeloSkarbonką, wyrazić zgody marketingowe i zalogować się do bankowości mobilnej, aby otrzymać 60 zł na start. Dodatkowo, przez 9 miesięcy bank zwróci 5% wartości płatności bezgotówkowych kartą, telefonem lub BLIKIEM, maksymalnie do 540 zł. W promocji mogą wziąć osoby, które nie posiadały konta w VeloBanku w ostatnim czasie.</Text>
-                                <Link color="#00b13f" display="inline-block" href="https://www.velobank.pl/klienci-indywidualni/biuro-prasowe/nowa-oferta-velobanku-60-zl-na-start-i-do-540-zl-zwrotu-za-zakupy.html" isExternal>Przeczytaj więcej o promocji</Link>
-                            </VStack>
-                        </VStack>
-                    </Box>
-                    <Box
-                        width={{ base: '100%', lg: '45%' }}
-                        bg="#F7FAFC"
-                        p={{ base: '26px', lg: '32px' }}
-                        borderRadius={{ base: '0 0 8px 8px', lg: '0 8px 8px 0' }}
-                    >
-                        <VStack gap="6" alignItems="stretch" height={{ base: '400px', lg: '100%' }}>
-                            <Flex alignItems="center" justifyContent="space-between">
-                                <Heading size="md">Twoje wydatki</Heading>
-                                <Tooltip label='Wyczyść listę'>
-                                    <IconButton size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>} onClick={handleClear} isDisabled={transactions.length === 0}/>
-                                </Tooltip>
-                            </Flex>
-                            <Divider/>
-                            <Flex height="100%" alignItems={transactions.length > 0 ? 'flex-start' : 'center'}
-                                  justifyContent="center" flex="1" overflowY="auto">
-                                {transactions.length > 0 ? <>
-                                    <VStack spacing={4} align='stretch' width="100%">
-                                        {transactions.map((transaction) => (
-                                            <Flex alignItems='center' justifyContent='space-between' gap={4} key={transaction.id}>
-                                                <div>
-                                                    <Text fontSize="lg" fontWeight="semibold">{transaction.value} PLN</Text>
-                                                    <Text fontSize='sm' color='#00b13f'>{transaction.cashback} PLN</Text>
-                                                </div>
-                                                <Flex gap={4} align='stretch'>
-                                                    <Tooltip label='Usuń pozycję'>
-                                                        <IconButton aria-label='Usuń pozycję' icon={<DeleteIcon/>} colorScheme="red" size="sm" onClick={() => promptDeleteTransaction(transaction)} />
-                                                    </Tooltip>
-                                                </Flex>
-                                            </Flex>))}
-                                    </VStack>
-                                </> : <Text color="#9ca5af">Brak danych do wyświetlenia</Text>}
-                            </Flex>
-                            <Divider/>
-                            <Box>
-                                <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg" color="#00b13f">
-                                    <Text>Twój cashback</Text>
-                                    <Text>{accumulatedCashback.toFixed(2)} PLN</Text>
-                                </Flex>
-                                <Flex justifyContent="space-between" fontWeight="normal" fontSize="md" color="#9ca5af">
-                                    <Text>Do wydania zostało</Text>
-                                    <Text>{remainingSpendLimit.toFixed(2)} PLN</Text>
-                                </Flex>
-                            </Box>
-                        </VStack>
-                    </Box>
+                {inputError && <ErrorAlert inputError={inputError} errorAlertRef={errorAlertRef} handleCloseAlert={handleCloseAlert} />}
+                <Flex bg="white" borderRadius="8px" boxShadow="xl" justifyContent="space-between" gap={{ base: '6', lg: '' }} maxHeight={{ base: '100%', lg: '600px' }} height={{ base: '100%', lg: '600px' }} direction={{ base: 'column', lg: 'row' }}>
+                    <CalculatorForm transactionAmount={transactionAmount} setTransactionAmount={setTransactionAmount} handleKeyDown={handleKeyDown} inputError={inputError} inputRef={inputRef} addTransaction={addTransaction} />
+                    <Transactions handleClear={handleClear} transactions={transactions} promptDeleteTransaction={promptDeleteTransaction} accumulatedCashback={accumulatedCashback} remainingSpendLimit={remainingSpendLimit} />
                 </Flex>
-                <Flex
-                    mt={6}
-                    alignItems="center"
-                    justifyContent={{ base: 'center', lg: 'space-between' }}
-                    width="100%"
-                    direction={{ base: 'column', lg: 'row' }}
-                >
-                    <Text m={0} fontSize="xs" color="#9ca5af">Wersja: { APP_VERSION }</Text>
-                    <Text m={0} fontSize="xs" color="#9ca5af">Data ostatniej operacji: {lastOperationDate ? lastOperationDate : "Brak operacji"}</Text>
-                </Flex>
+                <Footer APP_VERSION={APP_VERSION} lastOperationDate={lastOperationDate} />
             </Box>
         </Flex>
 
-        <AlertDialog
-            isOpen={isOpen}
-            leastDestructiveRef={cancelRef}
-            onClose={onClose}
-            isCentered={true}
-        >
-            <AlertDialogOverlay>
-                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }}>
-                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Wyczyścić listę? </AlertDialogHeader>
-                    <AlertDialogBody>Czy na pewno chcesz wyczyścić listę wydatków?</AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>Anuluj</Button>
-                        <Button colorScheme="red" onClick={clearAllTransactions} ml={3}>Wyczyść</Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
-
-        <AlertDialog
-            isOpen={isDeleteOpen}
-            leastDestructiveRef={cancelRef}
-            onClose={onDeleteClose}
-            isCentered={true}
-        >
-            <AlertDialogOverlay>
-                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }}>
-                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Usuń pozycję?</AlertDialogHeader>
-                    <AlertDialogBody>Czy na pewno chcesz usunąć tę pozycję? Tej operacji nie można cofnąć.</AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onDeleteClose}>Anuluj</Button>
-                        <Button colorScheme="red" onClick={deleteTransaction} ml={3}>Usuń</Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
-
+        <ClearAllTransactionsAlert isOpen={isOpen} onClose={onClose} cancelRef={cancelRef} clearAllTransactions={clearAllTransactions} />
+        <DeleteTransactionAlert isDeleteOpen={isDeleteOpen} onDeleteClose={onDeleteClose} cancelRef={cancelRef} deleteTransaction={deleteTransaction} />
     </>)
 }
 
