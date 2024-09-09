@@ -28,7 +28,6 @@ import {
     useToast
 } from '@chakra-ui/react';
 import {DeleteIcon, RepeatIcon} from '@chakra-ui/icons';
-import {v4 as uuidv4} from 'uuid';
 
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60;
@@ -83,7 +82,7 @@ function CalcForm() {
         let cashbackValue = parseFloat((parsedValue * CASHBACK_PERCENTAGE_VALUE).toFixed(2));
 
         setPayments([...payments, {
-            id: uuidv4(), value: parsedValue.toFixed(2), cashback: cashbackValue,
+            id: Date.now(), value: parsedValue.toFixed(2), cashback: cashbackValue,
         }]);
 
         setCashback(parseFloat((cashback + cashbackValue).toFixed(2)));
@@ -203,6 +202,7 @@ function CalcForm() {
     }, [error, isSmallScreen])
 
     useEffect(() => {
+        console.log(payments)
         if (payments.length > 0) {
             setError(false);
         }
