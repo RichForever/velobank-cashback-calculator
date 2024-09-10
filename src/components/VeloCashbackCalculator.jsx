@@ -26,7 +26,7 @@ const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const APP_VERSION = '3.3.3';
+const APP_VERSION = '3.3.4';
 
 // Expected structure for localstorage data with just the key names (no type checking)
 const expectedLocalStorageShape = {
