@@ -1,7 +1,10 @@
 import React from "react";
 import {Box, Button, FormControl, FormLabel, Input} from "@chakra-ui/react";
+import { useCalculatorContext } from "./CalculatorContext";
 
-const CalculatorForm = ({ transactionAmount, setTransactionAmount, handleKeyDown, inputError, inputRef, addTransaction }) => {
+
+const CalculatorForm = () => {
+    const { transactionAmount, setTransactionAmount, handleKeyDown, inputError, inputRef, addTransaction } = useCalculatorContext();
     return (
         <Box>
             <FormControl id="transaction-value" my="3">

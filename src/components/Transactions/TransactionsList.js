@@ -1,8 +1,10 @@
+import React from "react";
 import {Flex, IconButton, Text, Tooltip, VStack} from "@chakra-ui/react";
 import {DeleteIcon} from "@chakra-ui/icons";
-import React from "react";
+import { useTransactionsContext } from "./TransactionsContext";
 
-const TransactionsList = ({ transactions, promptDeleteTransaction }) => {
+const TransactionsList = () => {
+    const { transactions, promptDeleteTransaction } = useTransactionsContext();
     return (
         <Flex height="100%" alignItems={transactions.length > 0 ? 'flex-start' : 'center'}
               justifyContent="center" flex="1" overflowY="auto">

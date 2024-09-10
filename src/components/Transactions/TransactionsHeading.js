@@ -1,8 +1,10 @@
 import React from "react";
 import {Flex, Heading, IconButton, Tooltip} from "@chakra-ui/react";
 import {RepeatIcon} from "@chakra-ui/icons";
+import { useTransactionsContext } from "./TransactionsContext";
 
-const TransactionsHeading = ({ handleClear, transactions }) => {
+const TransactionsHeading = () => {
+    const { handleClear, transactions } = useTransactionsContext();
     return (
         <Flex alignItems="center" justifyContent="space-between">
             <Heading size="md">Twoje wydatki</Heading>

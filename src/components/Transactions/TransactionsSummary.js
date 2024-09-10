@@ -1,7 +1,9 @@
 import React from "react";
 import {Box, Flex, Text} from "@chakra-ui/react";
+import { useTransactionsContext } from "./TransactionsContext";
 
-const TransactionsSummary = ({ accumulatedCashback, remainingSpendLimit }) => {
+const TransactionsSummary = () => {
+    const { accumulatedCashback, remainingSpendLimit } = useTransactionsContext();
     return (
         <Box>
             <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg" color="#00b13f">

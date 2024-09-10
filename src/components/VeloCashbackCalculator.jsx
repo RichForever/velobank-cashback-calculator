@@ -1,7 +1,9 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import { Box, Flex, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
 import Calculator from './Calculator/Calculator';
+import { CalculatorProvider } from "./Calculator/CalculatorContext";
 import Transactions from "./Transactions/Transactions";
+import { TransactionsProvider } from "./Transactions/TransactionsContext";
 import Footer from './Footer';
 import Header from './Header';
 import ErrorAlert from "./ErrorAlert";
@@ -256,8 +258,25 @@ function VeloCashbackCalculator() {
             <Box width="100%" maxWidth="1000px">
                 {inputError && <ErrorAlert errorAlertRef={errorAlertRef} setInputError={setInputError} />}
                 <Flex bg="white" borderRadius="8px" boxShadow="xl" justifyContent="space-between" gap={{ base: '6', lg: '' }} maxHeight={{ base: '100%', lg: '600px' }} height={{ base: '100%', lg: '600px' }} direction={{ base: 'column', lg: 'row' }}>
-                    <Calculator transactionAmount={transactionAmount} setTransactionAmount={setTransactionAmount} handleKeyDown={handleKeyDown} inputError={inputError} inputRef={inputRef} addTransaction={addTransaction} />
-                    <Transactions handleClear={handleClear} transactions={transactions} promptDeleteTransaction={promptDeleteTransaction} accumulatedCashback={accumulatedCashback} remainingSpendLimit={remainingSpendLimit} />
+                    <CalculatorProvider
+                        transactionAmount={transactionAmount}
+                        setTransactionAmount={setTransactionAmount}
+                        handleKeyDown={handleKeyDown}
+                        inputError={inputError}
+                        inputRef={inputRef}
+                        addTransaction={addTransaction}
+                    >
+                        <Calculator />
+                    </CalculatorProvider>
+                    <TransactionsProvider
+                        handleClear={handleClear}
+                        transactions={transactions}
+                        promptDeleteTransaction={promptDeleteTransaction}
+                        accumulatedCashback={accumulatedCashback}
+                        remainingSpendLimit={remainingSpendLimit}
+                    >
+                        <Transactions />
+                    </TransactionsProvider>
                 </Flex>
                 <Footer APP_VERSION={APP_VERSION} lastOperationDate={lastOperationDate} />
             </Box>
