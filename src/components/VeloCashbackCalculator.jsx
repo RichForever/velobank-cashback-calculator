@@ -108,8 +108,8 @@ function VeloCashbackCalculator() {
         let updatedAccumulatedCashback = parseFloat((accumulatedCashback + calculatedCashback).toFixed(2));
         setAccumulatedCashback(updatedAccumulatedCashback);
 
-        let updatedremainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
-        setremainingSpendLimit(updatedremainingSpendLimit);
+        let updatedRemainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
+        setremainingSpendLimit(updatedRemainingSpendLimit);
 
         // Set the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
@@ -234,7 +234,7 @@ function VeloCashbackCalculator() {
             if (!hasValidStructure(parsedData, expectedLocalStorageShape)) {
                 // If the structure is invalid, clear all transactions
                 clearAllTransactions();
-                showToast("storage-reset", "The local storage data has been reset due to changes in structure.", "warning");
+                showToast("storage-reset", "Dane zapisane w pamięci podręcznej zostały zresetowane z powodu zmian w strukturze.", "warning");
             }
         }
     }, []);
