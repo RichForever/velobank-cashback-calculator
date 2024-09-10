@@ -6,7 +6,7 @@ import CalculatorForm from "./CalculatorForm";
 
 const Calculator = () => {
     return (
-        <Box width={{ base: '100%', lg: '50%' }} p={{ base: '26px', lg: '32px' }} >
+        <Box width={{ base: '100%', lg: '50%' }} p={{ base: 6, lg: 8 }} >
             <VStack alignItems="stretch" gap="6">
                 <VStack gap="2" alignItems="stretch">
                     <CalculatorHeading />

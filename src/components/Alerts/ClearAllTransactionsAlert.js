@@ -4,10 +4,11 @@ import {
     AlertDialogBody,
     AlertDialogContent, AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogOverlay, Button
+    AlertDialogOverlay, Button, useColorModeValue
 } from "@chakra-ui/react";
 
 const ClearAllTransactionsAlert = ({ isOpen, onClose, cancelRef, clearAllTransactions }) => {
+    const bg = useColorModeValue("white", "#444544");
     return (
         <AlertDialog
             isOpen={isOpen}
@@ -16,7 +17,7 @@ const ClearAllTransactionsAlert = ({ isOpen, onClose, cancelRef, clearAllTransac
             isCentered={true}
         >
             <AlertDialogOverlay>
-                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }}>
+                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }} bg={bg}>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">Wyczyścić listę? </AlertDialogHeader>
                     <AlertDialogBody>Czy na pewno chcesz wyczyścić listę wydatków?</AlertDialogBody>
                     <AlertDialogFooter>

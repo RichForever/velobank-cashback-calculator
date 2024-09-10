@@ -1,5 +1,15 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import { Box, Flex, useBreakpointValue, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    IconButton,
+    Tooltip,
+    useBreakpointValue,
+    useColorMode,
+    useColorModeValue,
+    useDisclosure,
+    useToast
+} from '@chakra-ui/react';
 import Calculator from './Calculator/Calculator';
 import { CalculatorProvider } from "./Calculator/CalculatorContext";
 import Transactions from "./Transactions/Transactions";
@@ -9,13 +19,14 @@ import Header from './Header';
 import ErrorAlert from "./ErrorAlert";
 import ClearAllTransactionsAlert from "./Alerts/ClearAllTransactionsAlert";
 import DeleteTransactionAlert from "./Alerts/DeleteTransactionAlert";
+import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 
 // Constants defining cashback rules and local storage key
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const APP_VERSION = '3.3.2';
+const APP_VERSION = '3.3.3';
 
 // Expected structure for localstorage data with just the key names (no type checking)
 const expectedLocalStorageShape = {
@@ -61,25 +72,16 @@ function VeloCashbackCalculator() {
     const inputRef = useRef(null); // Ref for the input element
     const errorAlertRef = useRef(null); // Ref for error alert
 
-    // Check localStorage data structure on mount
-    useEffect(() => {
-        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
-        if (savedData) {
-            const parsedData = JSON.parse(savedData);
-            if (!hasValidStructure(parsedData, expectedLocalStorageShape)) {
-                // If the structure is invalid, clear all transactions
-                clearAllTransactions();
-                showToast("storage-reset", "The local storage data has been reset due to changes in structure.", "warning");
-            }
-        }
-    }, []);
-
     const {isOpen, onOpen, onClose} = useDisclosure(); // Disclosure for clear confirmation dialog
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure(); // Disclosure for delete confirmation dialog
 
     const cancelRef = React.useRef()
     const toast = useToast(); // Toast notifications for user feedback
     const isSmallScreen = useBreakpointValue({base: true, lg: false}); // Responsive design breakpoint
+
+    const { colorMode, toggleColorMode } = useColorMode()
+    const mainBg = useColorModeValue('#EDF2F7', '#191A19')
+    const wrapperBg = useColorModeValue('white', '#2e2f2e')
 
     // Function to add a new transaction
     const addTransaction = () => {
@@ -224,6 +226,19 @@ function VeloCashbackCalculator() {
         }
     };
 
+    // Check localStorage data structure on mount
+    useEffect(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        if (savedData) {
+            const parsedData = JSON.parse(savedData);
+            if (!hasValidStructure(parsedData, expectedLocalStorageShape)) {
+                // If the structure is invalid, clear all transactions
+                clearAllTransactions();
+                showToast("storage-reset", "The local storage data has been reset due to changes in structure.", "warning");
+            }
+        }
+    }, []);
+
     // Scroll to error alert on small screens if there's an input error
     useEffect(() => {
         if (isSmallScreen && errorAlertRef.current) {
@@ -253,11 +268,14 @@ function VeloCashbackCalculator() {
 
     // Render the component UI
     return (<>
-        <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg="#EDF2F7" padding={{ base: "64px 24px", lg: "24px" }} direction="column">
+        <Tooltip label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} placement="bottom-start">
+            <IconButton position="absolute" top={6} right={6} left="auto" size="sm" aria-label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} icon={colorMode === 'light' ? <MoonIcon/> : <SunIcon/>} onClick={toggleColorMode} />
+        </Tooltip>
+        <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg={mainBg} padding={6} direction="column">
             <Header />
             <Box width="100%" maxWidth="1000px">
                 {inputError && <ErrorAlert errorAlertRef={errorAlertRef} setInputError={setInputError} />}
-                <Flex bg="white" borderRadius="8px" boxShadow="xl" justifyContent="space-between" gap={{ base: '6', lg: '' }} maxHeight={{ base: '100%', lg: '600px' }} height={{ base: '100%', lg: '600px' }} direction={{ base: 'column', lg: 'row' }}>
+                <Flex bg={wrapperBg} borderRadius={8} boxShadow="xl" justifyContent="space-between" gap={{ base: '6', lg: '' }} maxHeight={{ base: '100%', lg: '600px' }} height={{ base: '100%', lg: '600px' }} direction={{ base: 'column', lg: 'row' }}>
                     <CalculatorProvider
                         transactionAmount={transactionAmount}
                         setTransactionAmount={setTransactionAmount}

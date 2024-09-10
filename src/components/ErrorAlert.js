@@ -7,7 +7,7 @@ const ErrorAlert = ({ errorAlertRef, setInputError }) => {
     const handleCloseAlert = () => setInputError(false);
 
     return (
-        <Alert status='error' borderRadius="8px" mb="6" ref={errorAlertRef}>
+        <Alert status='error' borderRadius={2} mb={6} ref={errorAlertRef}>
             <Flex align='center' justifyContent='space-between' grow={1}>
                 <Flex>
                     <AlertIcon/>

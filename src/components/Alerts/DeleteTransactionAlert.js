@@ -3,11 +3,12 @@ import {
     AlertDialogBody,
     AlertDialogContent, AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogOverlay, Button
+    AlertDialogOverlay, Button, useColorModeValue
 } from "@chakra-ui/react";
 import React from "react";
 
 const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, cancelRef, deleteTransaction }) => {
+    const bg = useColorModeValue("white", "#444544");
     return (
         <AlertDialog
             isOpen={isDeleteOpen}
@@ -16,7 +17,7 @@ const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, cancelRef, delete
             isCentered={true}
         >
             <AlertDialogOverlay>
-                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }}>
+                <AlertDialogContent margin={{ base: '0 1rem', lg: '' }} bg={bg}>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">Usuń pozycję?</AlertDialogHeader>
                     <AlertDialogBody>Czy na pewno chcesz usunąć tę pozycję? Tej operacji nie można cofnąć.</AlertDialogBody>
                     <AlertDialogFooter>

@@ -1,10 +1,11 @@
 import React from "react";
-import {Flex, IconButton, Text, Tooltip, VStack} from "@chakra-ui/react";
+import {Flex, IconButton, Text, Tooltip, useColorModeValue, VStack} from "@chakra-ui/react";
 import {DeleteIcon} from "@chakra-ui/icons";
 import { useTransactionsContext } from "./TransactionsContext";
 
 const TransactionsList = () => {
     const { transactions, promptDeleteTransaction } = useTransactionsContext();
+    const textColor = useColorModeValue("#9ca5af", "#757675");
     return (
         <Flex height="100%" alignItems={transactions.length > 0 ? 'flex-start' : 'center'}
               justifyContent="center" flex="1" overflowY="auto">
@@ -23,7 +24,7 @@ const TransactionsList = () => {
                             </Flex>
                         </Flex>))}
                 </VStack>
-            </> : <Text color="#9ca5af">Brak danych do wyświetlenia</Text>}
+            </> : <Text color={textColor}>Brak danych do wyświetlenia</Text>}
         </Flex>
     )
 }
