@@ -9,7 +9,6 @@ A simple cashback calculator built with React and Chakra UI that allows users to
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [File Structure](#file-structure)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -60,29 +59,6 @@ The app will run on http://localhost:3000/
 ## Technologies Used
 - [React](https://reactjs.org/)
 - [Chakra UI](https://chakra-ui.com/) - A simple, modular, and accessible component library for React.
-- [UUID](https://www.npmjs.com/package/uuid) - For generating unique IDs for each expense.
-
-## File Structure
-```
-cashback-calculator/
-├── public/
-│   ├── favicon.ico
-│   ├── index.html
-│   ├── logo192.png
-│   ├── logo512.png
-│   ├── manifest.json
-│   ├── robots.txt
-├── src/
-│   ├── CalcForm.jsx
-│   ├── index.css
-│   ├── index.js
-│   ├── VeloCashbackCalculator.js
-├── .gitignore
-├── README.md
-├── package.json
-├── package-lock.json
-└── .gitignore
-```
 
 ## Contributing
 
