@@ -11,8 +11,8 @@ const TransactionsList = ({ transactions, promptDeleteTransaction }) => {
                     {transactions.map((transaction) => (
                         <Flex alignItems='center' justifyContent='space-between' gap={4} key={transaction.id}>
                             <div>
-                                <Text fontSize="lg" fontWeight="semibold">{transaction.value} PLN</Text>
-                                <Text fontSize='sm' color='#00b13f'>{transaction.cashback} PLN</Text>
+                                <Text fontSize="lg" fontWeight="semibold">{transaction.value.toFixed(2)} PLN</Text>
+                                <Text fontSize='sm' color='#00b13f'>{transaction.cashback.toFixed(2)} PLN</Text>
                             </div>
                             <Flex gap={4} align='stretch'>
                                 <Tooltip label='Usuń pozycję'>

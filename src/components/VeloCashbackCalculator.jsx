@@ -13,71 +13,64 @@ const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const defaultState = {
-    transactions: [],
-    accumulatedCashback: 0,
-    remainingSpendLimit: 1200.00,
-    lastOperationDate: null
+const APP_VERSION = '3.3.2';
+
+// Expected structure for localstorage data with just the key names (no type checking)
+const expectedLocalStorageShape = {
+    lastOperationDate: "",
+    accumulatedCashback: "",
+    remainingSpendLimit: "",
+    transactions: ""
 };
 
-const isValidLocalStorageData = (data) => {
-    if (!data) return false;
-
-    const hasValidTransactions = Array.isArray(data.transactions);
-    const hasValidCashback = typeof data.accumulatedCashback === 'number';
-    const hasValidSpendLimit = typeof data.remainingSpendLimit === 'number';
-    const hasValidLastOperationDate = data.lastOperationDate === null || typeof data.lastOperationDate === 'string';
-
-    return hasValidTransactions && hasValidCashback && hasValidSpendLimit && hasValidLastOperationDate;
+// Helper function to check if the structure is valid (only keys)
+const hasValidStructure = (data, expectedShape) => {
+    const actualKeys = Object.keys(data);
+    const expectedKeys = Object.keys(expectedShape);
+    // Check if every expected key exists in the actual data
+    return expectedKeys.every(key => actualKeys.includes(key));
 };
-
-const APP_VERSION = '3.3.1';
 
 function VeloCashbackCalculator() {
 
-    const [transactions, setTransactions] = useState([]);
-    const [accumulatedCashback, setAccumulatedCashback] = useState(0);
-    const [remainingSpendLimit, setRemainingSpendLimit] = useState(1200);
-    const [lastOperationDate, setLastOperationDate] = useState(null);
-
-
-    // run verify mechanism on component mount
-    useEffect(() => {
+    const [transactions, setTransactions] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).transactions : [];
+    });
 
-        // If data exists, validate it
-        if (savedData) {
-            try {
-                const parsedData = JSON.parse(savedData);
+    const [accumulatedCashback, setAccumulatedCashback] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).accumulatedCashback : 0;
+    });
 
-                // If valid data, set the state, otherwise reset localStorage
-                if (isValidLocalStorageData(parsedData)) {
-                    setTransactions(parsedData.transactions);
-                    setAccumulatedCashback(parsedData.accumulatedCashback);
-                    setRemainingSpendLimit(parsedData.remainingSpendLimit);
-                    setLastOperationDate(parsedData.lastOperationDate);
-                } else {
-                    console.warn('Invalid localStorage data structure. Resetting data...');
-                    localStorage.removeItem(LOCALSTORAGE_KEY);
-                    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
-                }
-            } catch (error) {
-                // In case of JSON parsing errors, reset localStorage
-                console.error('Error parsing localStorage data. Resetting data...', error);
-                localStorage.removeItem(LOCALSTORAGE_KEY);
-                localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
-            }
-        } else {
-            // If no data exists, set default values
-            localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(defaultState));
-        }
-    }, []);
+    const [remainingSpendLimit, setremainingSpendLimit] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).remainingSpendLimit : CASHBACK_MAX_SPEND_VALUE;
+    });
+
+    const [lastOperationDate, setLastOperationDate] = useState(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        return savedData ? JSON.parse(savedData).lastOperationDate : null;
+    });
 
     const [selectedPayment, setSelectedPayment] = useState(null); // Selected transaction for deletion
     const [transactionAmount, setTransactionAmount] = useState(''); // Current transaction amount input
     const [inputError, setInputError] = useState(false); // Error state for invalid input
     const inputRef = useRef(null); // Ref for the input element
     const errorAlertRef = useRef(null); // Ref for error alert
+
+    // Check localStorage data structure on mount
+    useEffect(() => {
+        const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
+        if (savedData) {
+            const parsedData = JSON.parse(savedData);
+            if (!hasValidStructure(parsedData, expectedLocalStorageShape)) {
+                // If the structure is invalid, clear all transactions
+                clearAllTransactions();
+                showToast("storage-reset", "The local storage data has been reset due to changes in structure.", "warning");
+            }
+        }
+    }, []);
 
     const {isOpen, onOpen, onClose} = useDisclosure(); // Disclosure for clear confirmation dialog
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure(); // Disclosure for delete confirmation dialog
@@ -111,8 +104,8 @@ function VeloCashbackCalculator() {
         let updatedAccumulatedCashback = parseFloat((accumulatedCashback + calculatedCashback).toFixed(2));
         setAccumulatedCashback(updatedAccumulatedCashback);
 
-        let updatedRemainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
-        setRemainingSpendLimit(updatedRemainingSpendLimit);
+        let updatedremainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
+        setremainingSpendLimit(updatedremainingSpendLimit);
 
         // Set the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
@@ -151,7 +144,7 @@ function VeloCashbackCalculator() {
 
         // Adjust accumulated cashback and remaining spend limit
         setAccumulatedCashback((prevAccumulatedCashback) => parseFloat((prevAccumulatedCashback - cashback).toFixed(2)));
-        setRemainingSpendLimit((prevRemainingSpendLimit) => parseFloat((prevRemainingSpendLimit + parseFloat(value)).toFixed(2)));
+        setremainingSpendLimit((prevremainingSpendLimit) => parseFloat((prevremainingSpendLimit + parseFloat(value)).toFixed(2)));
 
         // Update the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
@@ -187,7 +180,7 @@ function VeloCashbackCalculator() {
         setTransactionAmount('');
         setInputError(false);
         setAccumulatedCashback(0);
-        setRemainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
+        setremainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
 
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
             day: '2-digit',
