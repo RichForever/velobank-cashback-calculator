@@ -7,7 +7,7 @@ const Header = () => {
 
     return (
         <Heading mb="16" mt={{ base: 24, lg: 0 }} textAlign="center">
-            <Text display="inline-block" color={accentColor}>VeloBank</Text> Cashback Calculator
+            <Text display="inline-block" color={accentColor}>VeloBank</Text> Cashback Kalkulator
         </Heading>
     )
 }
