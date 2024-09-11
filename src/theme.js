@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 import { customButtonTheme } from './theme/button'
+import { customTooltipTheme } from './theme/tooltip'
 
 const theme = extendTheme({
     initialColorMode: 'light',
@@ -37,6 +38,7 @@ const theme = extendTheme({
     },
     components: {
         Button: customButtonTheme,
+        Tooltip: customTooltipTheme
     }
 })
 export default theme

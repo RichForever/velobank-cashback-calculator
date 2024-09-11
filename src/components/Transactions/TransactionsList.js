@@ -19,7 +19,7 @@ const TransactionsList = () => {
                                 <Text fontSize='sm' color={cashbackValueColor}>{transaction.cashback.toFixed(2)} PLN</Text>
                             </div>
                             <Flex gap={4} align='stretch'>
-                                <Tooltip label='Usuń pozycję'>
+                                <Tooltip label='Usuń pozycję' placement="bottom-end">
                                     <IconButton aria-label='Usuń pozycję' icon={<DeleteIcon/>} colorScheme="red" size="sm" onClick={() => promptDeleteTransaction(transaction)} />
                                 </Tooltip>
                             </Flex>

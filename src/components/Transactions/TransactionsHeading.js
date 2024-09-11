@@ -13,7 +13,7 @@ const TransactionsHeading = () => {
     return (
         <Flex alignItems="center" justifyContent="space-between">
             <Heading size="md">Twoje wydatki</Heading>
-            <Tooltip label='Wyczyść listę'>
+            <Tooltip label='Wyczyść listę' placement="bottom-end">
                 <IconButton bg={clearToggleBg} color={clearToggleColor} _hover={{ bg: clearToggleBgHover, color: clearToggleColorHover }} size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>} onClick={handleClear} isDisabled={transactions.length === 0}/>
             </Tooltip>
         </Flex>
