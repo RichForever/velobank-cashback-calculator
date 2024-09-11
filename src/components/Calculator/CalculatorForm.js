@@ -5,7 +5,7 @@ import { useCalculatorContext } from "./CalculatorContext";
 const CalculatorForm = () => {
     const { transactionAmount, setTransactionAmount, handleKeyDown, inputError, inputRef, addTransaction } = useCalculatorContext();
     const inputBorderColor = useColorModeValue("lightMode.inputBorder", "darkMode.inputBorder");
-    const inputLabelColor = useColorModeValue("lightMode.heading", "darkMode.heading");
+    const inputLabelColor = useColorModeValue("lightMode.text", "darkMode.text");
     return (
         <Box>
             <FormControl id="transaction-value" my="3">
