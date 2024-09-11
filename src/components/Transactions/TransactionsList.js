@@ -5,7 +5,8 @@ import { useTransactionsContext } from "./TransactionsContext";
 
 const TransactionsList = () => {
     const { transactions, promptDeleteTransaction } = useTransactionsContext();
-    const textColor = useColorModeValue("#9ca5af", "#757675");
+    const textColor = useColorModeValue("lightMode.textSecondary", "darkMode.textSecondary");
+    const cashbackValueColor = useColorModeValue("lightMode.bgAccent", "darkMode.bgAccent");
     return (
         <Flex height="100%" alignItems={transactions.length > 0 ? 'flex-start' : 'center'}
               justifyContent="center" flex="1" overflowY="auto">
@@ -15,7 +16,7 @@ const TransactionsList = () => {
                         <Flex alignItems='center' justifyContent='space-between' gap={4} key={transaction.id}>
                             <div>
                                 <Text fontSize="lg" fontWeight="semibold">{transaction.value.toFixed(2)} PLN</Text>
-                                <Text fontSize='sm' color='#00b13f'>{transaction.cashback.toFixed(2)} PLN</Text>
+                                <Text fontSize='sm' color={cashbackValueColor}>{transaction.cashback.toFixed(2)} PLN</Text>
                             </div>
                             <Flex gap={4} align='stretch'>
                                 <Tooltip label='Usuń pozycję'>

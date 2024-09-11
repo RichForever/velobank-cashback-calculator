@@ -26,7 +26,6 @@ const CASHBACK_PERCENTAGE_VALUE = 0.05;
 const CASHBACK_MAX_VALUE = 60.00;
 const CASHBACK_MAX_SPEND_VALUE = 1200.00;
 const LOCALSTORAGE_KEY = 'velobankCashbackCalculatorData'
-const APP_VERSION = '3.3.4';
 
 // Expected structure for localstorage data with just the key names (no type checking)
 const expectedLocalStorageShape = {
@@ -44,7 +43,7 @@ const hasValidStructure = (data, expectedShape) => {
     return expectedKeys.every(key => actualKeys.includes(key));
 };
 
-function VeloCashbackCalculator() {
+function VeloCashbackCalculator({ appVersion }) {
 
     const [transactions, setTransactions] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
@@ -79,9 +78,7 @@ function VeloCashbackCalculator() {
     const toast = useToast(); // Toast notifications for user feedback
     const isSmallScreen = useBreakpointValue({base: true, lg: false}); // Responsive design breakpoint
 
-    const { colorMode, toggleColorMode } = useColorMode()
-    const mainBg = useColorModeValue('#EDF2F7', '#191A19')
-    const wrapperBg = useColorModeValue('white', '#2e2f2e')
+
 
     // Function to add a new transaction
     const addTransaction = () => {
@@ -266,10 +263,18 @@ function VeloCashbackCalculator() {
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
     }, [lastOperationDate, accumulatedCashback, remainingSpendLimit, transactions ]);
 
+    const { colorMode, toggleColorMode } = useColorMode()
+    const mainBg = useColorModeValue('lightMode.bgBody', 'darkMode.bgBody')
+    const wrapperBg = useColorModeValue('white', 'darkMode.bgWrapperPrimary')
+    const colorModeToggleBg = useColorModeValue('lightMode.iconButtonBg', 'darkMode.iconButtonBg')
+    const colorModeToggleBgHover = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent')
+    const colorModeToggleColor = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent')
+    const colorModeToggleColorHover = useColorModeValue('lightMode.iconButtonBg', 'darkMode.iconButtonBg')
+
     // Render the component UI
     return (<>
         <Tooltip label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} placement="bottom-start">
-            <IconButton position="absolute" top={6} right={6} left="auto" size="sm" aria-label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} icon={colorMode === 'light' ? <MoonIcon/> : <SunIcon/>} onClick={toggleColorMode} />
+            <IconButton bg={colorModeToggleBg} color={colorModeToggleColor} _hover={{ bg: colorModeToggleBgHover, color: colorModeToggleColorHover }} position="absolute" top={6} right={6} left="auto" size="sm" aria-label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} icon={colorMode === 'light' ? <MoonIcon/> : <SunIcon/>} onClick={toggleColorMode} />
         </Tooltip>
         <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg={mainBg} padding={6} direction="column">
             <Header />
@@ -296,7 +301,7 @@ function VeloCashbackCalculator() {
                         <Transactions />
                     </TransactionsProvider>
                 </Flex>
-                <Footer APP_VERSION={APP_VERSION} lastOperationDate={lastOperationDate} />
+                <Footer APP_VERSION={appVersion} lastOperationDate={lastOperationDate} />
             </Box>
         </Flex>
 

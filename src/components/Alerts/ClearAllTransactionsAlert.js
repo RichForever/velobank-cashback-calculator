@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 
 const ClearAllTransactionsAlert = ({ isOpen, onClose, cancelRef, clearAllTransactions }) => {
-    const bg = useColorModeValue("white", "#444544");
+    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
     return (
         <AlertDialog
             isOpen={isOpen}

@@ -5,14 +5,15 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSummary from "./TransactionsSummary";
 
 const Transactions = () => {
-    const bg = useColorModeValue("#F7FAFC", "#353535");
+    const bg = useColorModeValue("lightMode.bgWrapperSecondary", "darkMode.bgWrapperSecondary");
+    const dividerBorderColor = useColorModeValue("lightMode.border", "darkMode.border");
     return (
         <Box width={{ base: '100%', lg: '45%' }} bg={bg} p={{ base: 6, lg: 8 }} borderRadius={{ base: '0 0 8px 8px', lg: '0 8px 8px 0' }}>
             <VStack gap="6" alignItems="stretch" height={{ base: '400px', lg: '100%' }}>
                 <TransactionsHeading />
-                <Divider />
+                <Divider borderColor={dividerBorderColor} />
                 <TransactionsList />
-                <Divider />
+                <Divider borderColor={dividerBorderColor} />
                 <TransactionsSummary />
             </VStack>
         </Box>

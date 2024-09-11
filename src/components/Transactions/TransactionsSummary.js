@@ -4,10 +4,11 @@ import { useTransactionsContext } from "./TransactionsContext";
 
 const TransactionsSummary = () => {
     const { accumulatedCashback, remainingSpendLimit } = useTransactionsContext();
-    const textColor = useColorModeValue("#9ca5af", "#8f908f");
+    const textColor = useColorModeValue("lightMode.textSecondary", "darkMode.textSecondary");
+    const cashbackValueColor = useColorModeValue("lightMode.bgAccent", "darkMode.bgAccent");
     return (
         <Box>
-            <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg" color="#00b13f">
+            <Flex justifyContent="space-between" fontWeight="bold" fontSize="lg" color={cashbackValueColor}>
                 <Text>Twój cashback</Text>
                 <Text>{accumulatedCashback.toFixed(2)} PLN</Text>
             </Flex>

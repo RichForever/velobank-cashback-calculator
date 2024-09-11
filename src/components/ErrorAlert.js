@@ -11,7 +11,7 @@ const ErrorAlert = ({ errorAlertRef, setInputError }) => {
             <Flex align='center' justifyContent='space-between' grow={1}>
                 <Flex>
                     <AlertIcon/>
-                    <AlertTitle color="#c53030" fontWeight="semibold">Pole nie może być puste</AlertTitle>
+                    <AlertTitle color="alert" fontWeight="semibold">Pole nie może być puste</AlertTitle>
                 </Flex>
                 <CloseButton onClick={handleCloseAlert}/>
             </Flex>

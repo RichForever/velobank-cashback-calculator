@@ -1,10 +1,11 @@
 import React from "react";
-import {Box, Divider, VStack} from "@chakra-ui/react";
+import {Box, Divider, useColorModeValue, VStack} from "@chakra-ui/react";
 import CalculatorHeading from "./CalculatorHeading";
 import CalculatorDescription from "./CalculatorDescription";
 import CalculatorForm from "./CalculatorForm";
 
 const Calculator = () => {
+    const dividerBorderColor = useColorModeValue("lightMode.border", "darkMode.border");
     return (
         <Box width={{ base: '100%', lg: '50%' }} p={{ base: 6, lg: 8 }} >
             <VStack alignItems="stretch" gap="6">
@@ -12,7 +13,7 @@ const Calculator = () => {
                     <CalculatorHeading />
                     <CalculatorForm />
                 </VStack>
-                <Divider/>
+                <Divider borderColor={dividerBorderColor} />
                 <CalculatorDescription />
             </VStack>
         </Box>

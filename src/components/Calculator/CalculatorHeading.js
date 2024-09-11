@@ -2,7 +2,7 @@ import React from "react";
 import {Box, Heading, Text, useColorModeValue} from "@chakra-ui/react";
 
 const CalculatorHeading = () => {
-    const textColor = useColorModeValue("#4A5568", "#8f908f");
+    const textColor = useColorModeValue("lightMode.text", "darkMode.text");
     return (
         <Box>
             <Heading size="md" mb="2">Dodaj swoje transakcje i sprawdź wartość cashbacku</Heading>

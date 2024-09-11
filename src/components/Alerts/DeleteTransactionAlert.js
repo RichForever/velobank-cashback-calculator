@@ -8,7 +8,7 @@ import {
 import React from "react";
 
 const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, cancelRef, deleteTransaction }) => {
-    const bg = useColorModeValue("white", "#444544");
+    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
     return (
         <AlertDialog
             isOpen={isDeleteOpen}
