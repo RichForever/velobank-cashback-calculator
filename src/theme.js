@@ -30,7 +30,7 @@ const theme = extendTheme({
           bgAccentHover: '#AEFFCB',
           heading: '#868B8B',
           text: '#697676',
-          textSecondary: '#3E6A6A',
+          textSecondary: '#568383',
           border: '#263131',
           inputBorder: '#263131',
           iconButtonBg: '#203737'
