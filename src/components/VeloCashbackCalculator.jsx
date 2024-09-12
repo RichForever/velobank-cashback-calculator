@@ -1,15 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import {
-    Box,
-    Flex,
-    IconButton,
-    Tooltip,
-    useBreakpointValue,
-    useColorMode,
-    useColorModeValue,
-    useDisclosure,
-    useToast
-} from '@chakra-ui/react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Box, Flex, useBreakpointValue, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
 import Calculator from './Calculator/Calculator';
 import { CalculatorProvider } from "./Calculator/CalculatorContext";
 import Transactions from "./Transactions/Transactions";
@@ -19,7 +9,7 @@ import Header from './Header';
 import ErrorAlert from "./ErrorAlert";
 import ClearAllTransactionsAlert from "./Alerts/ClearAllTransactionsAlert";
 import DeleteTransactionAlert from "./Alerts/DeleteTransactionAlert";
-import {MoonIcon, SunIcon} from "@chakra-ui/icons";
+import DarkModeToggle from "./DarkModeToggle";
 
 // Constants defining cashback rules and local storage key
 const CASHBACK_PERCENTAGE_VALUE = 0.05;
@@ -55,7 +45,7 @@ function VeloCashbackCalculator({ appVersion }) {
         return savedData ? JSON.parse(savedData).accumulatedCashback : 0;
     });
 
-    const [remainingSpendLimit, setremainingSpendLimit] = useState(() => {
+    const [remainingSpendLimit, setRemainingSpendLimit] = useState(() => {
         const savedData = localStorage.getItem(LOCALSTORAGE_KEY);
         return savedData ? JSON.parse(savedData).remainingSpendLimit : CASHBACK_MAX_SPEND_VALUE;
     });
@@ -74,18 +64,15 @@ function VeloCashbackCalculator({ appVersion }) {
     const {isOpen, onOpen, onClose} = useDisclosure(); // Disclosure for clear confirmation dialog
     const {isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose} = useDisclosure(); // Disclosure for delete confirmation dialog
 
-    const cancelRef = React.useRef()
     const toast = useToast(); // Toast notifications for user feedback
     const isSmallScreen = useBreakpointValue({base: true, lg: false}); // Responsive design breakpoint
-
-
 
     // Function to add a new transaction
     const addTransaction = () => {
         const transactionInputValue = parseFloat(transactionAmount);
 
         // Validate transaction amount
-        if (!transactionAmount || isNaN(transactionInputValue)) {
+        if (!transactionAmount || isNaN(transactionInputValue) || transactionInputValue === 0) {
             setInputError(true);
             return;
         }
@@ -106,7 +93,7 @@ function VeloCashbackCalculator({ appVersion }) {
         setAccumulatedCashback(updatedAccumulatedCashback);
 
         let updatedRemainingSpendLimit = parseFloat((remainingSpendLimit - transactionInputValue).toFixed(2));
-        setremainingSpendLimit(updatedRemainingSpendLimit);
+        setRemainingSpendLimit(updatedRemainingSpendLimit);
 
         // Set the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
@@ -119,7 +106,7 @@ function VeloCashbackCalculator({ appVersion }) {
         }));
 
         // Show toast notification for added transaction
-        showToast('item-added-success', "Pozycja dodana", "info")
+        showToast('item-added-success', "Transakcja dodana", "info")
 
         // Clear transaction input field
         setTransactionAmount('');
@@ -145,7 +132,7 @@ function VeloCashbackCalculator({ appVersion }) {
 
         // Adjust accumulated cashback and remaining spend limit
         setAccumulatedCashback((prevAccumulatedCashback) => parseFloat((prevAccumulatedCashback - cashback).toFixed(2)));
-        setremainingSpendLimit((prevremainingSpendLimit) => parseFloat((prevremainingSpendLimit + parseFloat(value)).toFixed(2)));
+        setRemainingSpendLimit((prevRemainingSpendLimit) => parseFloat((prevRemainingSpendLimit + parseFloat(value)).toFixed(2)));
 
         // Update the last operation date
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
@@ -181,7 +168,7 @@ function VeloCashbackCalculator({ appVersion }) {
         setTransactionAmount('');
         setInputError(false);
         setAccumulatedCashback(0);
-        setremainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
+        setRemainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
 
         setLastOperationDate(new Date().toLocaleString('pl-PL', {
             day: '2-digit',
@@ -263,19 +250,12 @@ function VeloCashbackCalculator({ appVersion }) {
         localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(data));
     }, [lastOperationDate, accumulatedCashback, remainingSpendLimit, transactions ]);
 
-    const { colorMode, toggleColorMode } = useColorMode()
     const mainBg = useColorModeValue('lightMode.bgBody', 'darkMode.bgBody')
     const wrapperBg = useColorModeValue('white', 'darkMode.bgWrapperPrimary')
-    const colorModeToggleBg = useColorModeValue('lightMode.iconButtonBg', 'darkMode.iconButtonBg')
-    const colorModeToggleBgHover = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent')
-    const colorModeToggleColor = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent')
-    const colorModeToggleColorHover = useColorModeValue('lightMode.iconButtonBg', 'darkMode.iconButtonBg')
 
     // Render the component UI
     return (<>
-        <Tooltip label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} placement="bottom-start">
-            <IconButton bg={colorModeToggleBg} color={colorModeToggleColor} _hover={{ bg: colorModeToggleBgHover, color: colorModeToggleColorHover }} position="absolute" top={6} right={6} left="auto" size="sm" aria-label={`Włącz tryb ${colorMode === 'light' ? 'ciemny' : 'jasny'}`} icon={colorMode === 'light' ? <MoonIcon/> : <SunIcon/>} onClick={toggleColorMode} />
-        </Tooltip>
+        <DarkModeToggle />
         <Flex width="100%" minHeight="100vh" alignItems="center" justifyContent="center" bg={mainBg} padding={6} direction="column">
             <Header />
             <Box width="100%" maxWidth="1000px">
@@ -305,8 +285,8 @@ function VeloCashbackCalculator({ appVersion }) {
             </Box>
         </Flex>
 
-        <ClearAllTransactionsAlert isOpen={isOpen} onClose={onClose} cancelRef={cancelRef} clearAllTransactions={clearAllTransactions} />
-        <DeleteTransactionAlert isDeleteOpen={isDeleteOpen} onDeleteClose={onDeleteClose} cancelRef={cancelRef} deleteTransaction={deleteTransaction} />
+        <ClearAllTransactionsAlert isOpen={isOpen} onClose={onClose} clearAllTransactions={clearAllTransactions} />
+        <DeleteTransactionAlert isDeleteOpen={isDeleteOpen} onDeleteClose={onDeleteClose} deleteTransaction={deleteTransaction} />
     </>)
 }
 

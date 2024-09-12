@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Divider, useColorModeValue, VStack} from "@chakra-ui/react";
+import { Box, Divider, VStack, useColorModeValue } from "@chakra-ui/react";
 import TransactionsHeading from "./TransactionsHeading";
 import TransactionsList from "./TransactionsList";
 import TransactionsSummary from "./TransactionsSummary";

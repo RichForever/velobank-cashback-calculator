@@ -1,14 +1,12 @@
-import React from "react";
-import {
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay, Button, useColorModeValue
-} from "@chakra-ui/react";
+import React, { useRef } from "react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react";
 
-const ClearAllTransactionsAlert = ({ isOpen, onClose, cancelRef, clearAllTransactions }) => {
+const ClearAllTransactionsAlert = ({ isOpen, onClose, clearAllTransactions }) => {
+
     const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
+
+    const cancelRef = useRef();
+
     return (
         <AlertDialog
             isOpen={isOpen}
@@ -18,8 +16,8 @@ const ClearAllTransactionsAlert = ({ isOpen, onClose, cancelRef, clearAllTransac
         >
             <AlertDialogOverlay>
                 <AlertDialogContent margin={{ base: '0 1rem', lg: '' }} bg={bg}>
-                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Wyczyścić listę? </AlertDialogHeader>
-                    <AlertDialogBody>Czy na pewno chcesz wyczyścić listę wydatków?</AlertDialogBody>
+                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Wyczyścić listę transakcji? </AlertDialogHeader>
+                    <AlertDialogBody>Czy na pewno chcesz wyczyścić listę transakcji?</AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={onClose}>Anuluj</Button>
                         <Button colorScheme="red" onClick={clearAllTransactions} ml={3}>Wyczyść</Button>

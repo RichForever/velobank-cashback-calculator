@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Heading, Text, useColorModeValue} from "@chakra-ui/react";
+import { Box, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 
 const CalculatorHeading = () => {
     const textColor = useColorModeValue("lightMode.text", "darkMode.text");

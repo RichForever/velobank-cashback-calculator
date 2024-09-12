@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Flex, Text, useColorModeValue} from "@chakra-ui/react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { useTransactionsContext } from "./TransactionsContext";
 
 const TransactionsSummary = () => {

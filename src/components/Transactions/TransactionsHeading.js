@@ -1,6 +1,6 @@
 import React from "react";
-import {Flex, Heading, IconButton, Tooltip, useColorModeValue} from "@chakra-ui/react";
-import {RepeatIcon} from "@chakra-ui/icons";
+import { Flex, Heading, IconButton, Tooltip, useColorModeValue } from "@chakra-ui/react";
+import { RepeatIcon } from "@chakra-ui/icons";
 import { useTransactionsContext } from "./TransactionsContext";
 
 const TransactionsHeading = () => {
@@ -12,9 +12,9 @@ const TransactionsHeading = () => {
     const clearToggleColorHover = useColorModeValue('lightMode.iconButtonBg', 'darkMode.iconButtonBg')
     return (
         <Flex alignItems="center" justifyContent="space-between">
-            <Heading size="md">Twoje wydatki</Heading>
-            <Tooltip label='Wyczyść listę' placement="bottom-end">
-                <IconButton bg={clearToggleBg} color={clearToggleColor} _hover={{ bg: clearToggleBgHover, color: clearToggleColorHover }} size="sm" aria-label='Wyczyść listę' icon={<RepeatIcon/>} onClick={handleClear} isDisabled={transactions.length === 0}/>
+            <Heading size="md">Twoje transakcje</Heading>
+            <Tooltip label='Wyczyść listę transakcji' placement="bottom-end">
+                <IconButton bg={clearToggleBg} color={clearToggleColor} _hover={{ bg: clearToggleBgHover, color: clearToggleColorHover }} size="sm" aria-label='Wyczyść listę transakcji' icon={<RepeatIcon/>} onClick={handleClear} isDisabled={transactions.length === 0}/>
             </Tooltip>
         </Flex>
     );

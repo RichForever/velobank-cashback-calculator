@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Divider, useColorModeValue, VStack} from "@chakra-ui/react";
+import { Box, Divider, VStack, useColorModeValue } from "@chakra-ui/react";
 import CalculatorHeading from "./CalculatorHeading";
 import CalculatorDescription from "./CalculatorDescription";
 import CalculatorForm from "./CalculatorForm";

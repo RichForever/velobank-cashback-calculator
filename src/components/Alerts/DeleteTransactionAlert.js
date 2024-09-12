@@ -1,14 +1,11 @@
-import {
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogContent, AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay, Button, useColorModeValue
-} from "@chakra-ui/react";
-import React from "react";
+import React, { useRef } from "react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react";
 
-const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, cancelRef, deleteTransaction }) => {
+const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, deleteTransaction }) => {
     const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
+
+    const cancelRef = useRef();
+
     return (
         <AlertDialog
             isOpen={isDeleteOpen}
@@ -18,8 +15,8 @@ const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, cancelRef, delete
         >
             <AlertDialogOverlay>
                 <AlertDialogContent margin={{ base: '0 1rem', lg: '' }} bg={bg}>
-                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Usuń pozycję?</AlertDialogHeader>
-                    <AlertDialogBody>Czy na pewno chcesz usunąć tę pozycję? Tej operacji nie można cofnąć.</AlertDialogBody>
+                    <AlertDialogHeader fontSize="lg" fontWeight="bold">Usunąć transakcję?</AlertDialogHeader>
+                    <AlertDialogBody>Czy na pewno chcesz usunąć tę transakcję? Tej operacji nie można cofnąć.</AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={onDeleteClose}>Anuluj</Button>
                         <Button colorScheme="red" onClick={deleteTransaction} ml={3}>Usuń</Button>

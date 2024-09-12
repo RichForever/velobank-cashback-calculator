@@ -1,5 +1,5 @@
 import React from "react";
-import {Flex, Text, useColorModeValue} from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 const Footer = ({ APP_VERSION, lastOperationDate }) => {
     const textColor = useColorModeValue("lightMode.textSecondary", "darkMode.textSecondary");

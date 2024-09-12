@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Button, FormControl, FormLabel, Input, useColorModeValue} from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input, useColorModeValue } from "@chakra-ui/react";
 import { useCalculatorContext } from "./CalculatorContext";
 
 const CalculatorForm = () => {

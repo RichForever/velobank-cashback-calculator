@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, Text, useColorModeValue, VStack} from "@chakra-ui/react";
+import { Link, Text, VStack, useColorModeValue} from "@chakra-ui/react";
 
 const CalculatorDescription = () => {
     const textColor = useColorModeValue("lightMode.text", "darkMode.text");
