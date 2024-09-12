@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, VStack, IconButton, Text, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useTransactionsContext } from "./TransactionsContext";
+import { useTransactionsContext } from "../context/TransactionsProvider";
 
 const TransactionsList = () => {
     const { transactions, promptDeleteTransaction } = useTransactionsContext();

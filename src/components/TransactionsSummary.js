@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
-import { useTransactionsContext } from "./TransactionsContext";
+import { useTransactionsContext } from "../context/TransactionsProvider";
 
 const TransactionsSummary = () => {
     const { accumulatedCashback, remainingSpendLimit } = useTransactionsContext();

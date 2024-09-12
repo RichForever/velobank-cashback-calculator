@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Heading, IconButton, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
-import { useTransactionsContext } from "./TransactionsContext";
+import { useTransactionsContext } from "../context/TransactionsProvider";
 
 const TransactionsHeading = () => {
     const { handleClear, transactions } = useTransactionsContext();

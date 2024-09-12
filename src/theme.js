@@ -1,12 +1,12 @@
 import { extendTheme } from '@chakra-ui/react'
-import { customButtonTheme } from './theme/button'
-import { customTooltipTheme } from './theme/tooltip'
+import { customButtonTheme } from './theme/customButton'
+import { customTooltipTheme } from './theme/customTooltip'
 
 const theme = extendTheme({
     initialColorMode: 'light',
     useSystemColorMode: false,
     colors: {
-        alert: '#c53030',
+      alert: '#c53030',
       lightMode: {
           accent: '#00B13F',
           bgBody: '#E9E9E9',

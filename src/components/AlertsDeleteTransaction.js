@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react";
+import { useAlertsContext } from "../context/AlertsProvider";
 
-const DeleteTransactionAlert = ({ isDeleteOpen, onDeleteClose, deleteTransaction }) => {
-    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
+const DeleteTransactionAlert = () => {
 
+    const { isDeleteOpen, onDeleteClose, deleteTransaction } = useAlertsContext();
     const cancelRef = useRef();
+    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
 
     return (
         <AlertDialog

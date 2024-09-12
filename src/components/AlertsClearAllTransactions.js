@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from "@chakra-ui/react";
+import { useAlertsContext } from "../context/AlertsProvider";
 
-const ClearAllTransactionsAlert = ({ isOpen, onClose, clearAllTransactions }) => {
+const AlertsClearAllTransactions = () => {
 
-    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
-
+    const { isOpen, onClose, clearAllTransactions } = useAlertsContext();
     const cancelRef = useRef();
+    const bg = useColorModeValue("white", "darkMode.bgWrapperPrimary");
 
     return (
         <AlertDialog
@@ -27,4 +28,4 @@ const ClearAllTransactionsAlert = ({ isOpen, onClose, clearAllTransactions }) =>
         </AlertDialog>
     )
 }
-export default ClearAllTransactionsAlert;
+export default AlertsClearAllTransactions;
