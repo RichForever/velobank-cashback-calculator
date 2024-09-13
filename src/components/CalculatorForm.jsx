@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputRightElement, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { CASHBACK_PERCENTAGE_VALUE } from '../constants';
 import { useCalculatorContext } from '../context/CalculatorProvider';
@@ -11,6 +11,8 @@ const CalculatorForm = () => {
     useCalculatorContext();
   const { showToast, isSmallScreen, inputRef } = useAppContext();
   const currentDate = useCurrentDate();
+
+  const [showClear, setShowClear] = useState(false);
 
   // Function to add a new transaction
   const addTransaction = () => {
@@ -74,7 +76,17 @@ const CalculatorForm = () => {
   const handleValueClearOnClick = () => {
     setTransactionAmount('');
     setFormError(false);
+    setShowClear(false)
   };
+
+  useEffect(() => {
+    if(transactionAmount > 0 && !formError) {
+      setShowClear(true)
+    }
+    return () => {
+      setShowClear(false)
+    }
+  }, [transactionAmount, formError]);
 
   // Scroll to error alert on small screens if there's an input error
   useEffect(() => {
@@ -122,7 +134,7 @@ const CalculatorForm = () => {
             borderColor={inputBorderColor}
             placeholder={'Wpisz wartość transakcji, np. 1.50'}
           />
-          {transactionAmount.length > 0 && (
+          {showClear && (
             <InputRightElement>
               <Tooltip label='Wyczyść pole' placement='bottom-end'>
                 <IconButton
