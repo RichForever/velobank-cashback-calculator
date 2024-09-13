@@ -9,7 +9,6 @@ A simple cashback calculator built with React and Chakra UI that allows users to
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
@@ -18,11 +17,13 @@ A simple cashback calculator built with React and Chakra UI that allows users to
 - View a list of all added expenses with their respective cashback values.
 - Dynamically update the total cashback and remaining balance.
 - Delete any expense from the list, and the cashback totals are automatically recalculated.
+- All calculations are saved in localStorage
 - User-friendly interface built with Chakra UI components.
+- Dark Mode support
 
 ## Demo
 
-You can check out the live demo of the project [here](#) (replace with your live demo link).
+You can check out the live demo of the project [here](https://richforever.github.io/velobank-cashback-calculator/).
 
 ## Installation
 
@@ -32,21 +33,25 @@ To get started with the project, follow these steps:
 
    ```bash
    git clone https://github.com/your-username/cashback-calculator.git
+   ```
 
 2. Navigate into the project directory:
 
    ```bash
    cd cashback-calculator
-   
+   ```
+
 3. Install dependencies:
 
    ```bash
    npm install
-   
+   ```
+
 4. Start the development server:
 
    ```bash
    npm start
+   ```
 
 The app will run on http://localhost:3000/
 
@@ -57,17 +62,10 @@ The app will run on http://localhost:3000/
 3. **Track Total Cashback:** The total cashback is displayed and updated automatically as expenses are added or deleted.
 
 ## Technologies Used
+
 - [React](https://reactjs.org/)
 - [Chakra UI](https://chakra-ui.com/) - A simple, modular, and accessible component library for React.
 
-## Contributing
-
-Contributions are welcome! If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcomed.
-1. Fork the repo
-2. Create your feature branch: git checkout -b feature-name
-3. Commit your changes: git commit -am 'Add some feature'
-4. Push to the branch: git push origin feature-name
-5. Submit a pull request
-
 ## License
+
 This project is licensed under the MIT License. See the LICENSE file for more information.
