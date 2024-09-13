@@ -14,7 +14,7 @@ const useToastNotification = () => {
           status: type,
           duration,
           isClosable: false,
-          variant: 'subtle',
+          variant: 'solid',
           position: 'bottom-right',
         });
       }
