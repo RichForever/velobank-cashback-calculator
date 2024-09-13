@@ -8,6 +8,7 @@ const AlertsClearAllTransactions = () => {
   const { clearAllTransactions } = useAppContext();
   const cancelRef = useRef();
   const bg = useColorModeValue('white', 'darkMode.bgWrapperPrimary');
+  const textColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
 
   return (
     <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose} isCentered={true}>
@@ -16,12 +17,14 @@ const AlertsClearAllTransactions = () => {
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             Wyczyścić listę transakcji?
           </AlertDialogHeader>
-          <AlertDialogBody>Czy na pewno chcesz wyczyścić listę transakcji?</AlertDialogBody>
+          <AlertDialogBody fontWeight='600' color={textColor}>
+            Czy na pewno chcesz wyczyścić listę transakcji?
+          </AlertDialogBody>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button ref={cancelRef} onClick={onClose} fontWeight='700'>
               Anuluj
             </Button>
-            <Button colorScheme='red' onClick={clearAllTransactions} ml={3}>
+            <Button colorScheme='red' onClick={clearAllTransactions} ml={3} fontWeight='700'>
               Wyczyść
             </Button>
           </AlertDialogFooter>

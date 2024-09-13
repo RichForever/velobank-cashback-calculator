@@ -1,10 +1,21 @@
 import { extendTheme } from '@chakra-ui/react';
 import { customButtonTheme } from './theme/customButton';
 import { customTooltipTheme } from './theme/customTooltip';
+import '@fontsource/red-hat-display';
+import '@fontsource/red-hat-display/900.css';
+import '@fontsource/red-hat-display/800.css';
+import '@fontsource/red-hat-display/700.css';
+import '@fontsource/red-hat-display/600.css';
+import '@fontsource/red-hat-display/500.css';
+import '@fontsource/red-hat-display/300.css';
 
 const theme = extendTheme({
   initialColorMode: 'light',
   useSystemColorMode: false,
+  fonts: {
+    heading: `'Red Hat Display', sans-serif`,
+    body: `'Red Hat Display', sans-serif`,
+  },
   colors: {
     alert: '#c53030',
     lightMode: {

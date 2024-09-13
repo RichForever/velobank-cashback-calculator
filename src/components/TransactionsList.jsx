@@ -41,10 +41,10 @@ const TransactionsList = () => {
             {transactions.map((transaction) => (
               <Flex alignItems='center' justifyContent='space-between' gap={4} key={transaction.id}>
                 <div>
-                  <Text fontSize='lg' fontWeight='semibold'>
+                  <Text fontSize='lg' fontWeight='700'>
                     {transaction.value.toFixed(2)} PLN
                   </Text>
-                  <Text fontSize='sm' color={cashbackValueColor}>
+                  <Text fontSize='sm' color={cashbackValueColor} fontWeight='600'>
                     {transaction.cashback.toFixed(2)} PLN
                   </Text>
                 </div>

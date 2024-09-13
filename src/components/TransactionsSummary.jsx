@@ -19,11 +19,11 @@ const TransactionsSummary = () => {
   const cashbackValueColor = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent');
   return (
     <Box>
-      <Flex justifyContent='space-between' fontWeight='bold' fontSize='lg' color={cashbackValueColor}>
+      <Flex justifyContent='space-between' fontWeight='800' fontSize='lg' color={cashbackValueColor}>
         <Text>Twój cashback</Text>
         <Text>{accumulatedCashback.toFixed(2)} PLN</Text>
       </Flex>
-      <Flex justifyContent='space-between' fontWeight='normal' fontSize='md' color={textColor}>
+      <Flex justifyContent='space-between' fontWeight='600' fontSize='md' color={textColor}>
         <Text>Do wydania zostało</Text>
         <Text>{remainingSpendLimit.toFixed(2)} PLN</Text>
       </Flex>

@@ -8,7 +8,7 @@ const CalculatorHeading = () => {
       <Heading size='md' mb='2'>
         Dodaj swoje transakcje i sprawdź wartość cashbacku
       </Heading>
-      <Text color={textColor} fontSize='base'>
+      <Text color={textColor} fontSize='base' fontWeight='500'>
         Kalkulator umożliwia obliczenie wartości spodziewanego cashbacku od danej transakcji.
       </Text>
     </Box>

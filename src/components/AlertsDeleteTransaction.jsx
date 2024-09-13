@@ -33,6 +33,7 @@ const DeleteTransactionAlert = () => {
   };
 
   const bg = useColorModeValue('white', 'darkMode.bgWrapperPrimary');
+  const textColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
 
   return (
     <AlertDialog isOpen={isDeleteOpen} leastDestructiveRef={cancelRef} onClose={onDeleteClose} isCentered={true}>
@@ -41,12 +42,14 @@ const DeleteTransactionAlert = () => {
           <AlertDialogHeader fontSize='lg' fontWeight='bold'>
             Usunąć transakcję?
           </AlertDialogHeader>
-          <AlertDialogBody>Czy na pewno chcesz usunąć tę transakcję? Tej operacji nie można cofnąć.</AlertDialogBody>
+          <AlertDialogBody fontWeight='600' color={textColor}>
+            Czy na pewno chcesz usunąć tę transakcję? Tej operacji nie można cofnąć.
+          </AlertDialogBody>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onDeleteClose}>
+            <Button ref={cancelRef} onClick={onDeleteClose} fontWeight='700'>
               Anuluj
             </Button>
-            <Button colorScheme='red' onClick={deleteTransaction} ml={3}>
+            <Button colorScheme='red' onClick={deleteTransaction} ml={3} fontWeight='700'>
               Usuń
             </Button>
           </AlertDialogFooter>
