@@ -1,7 +1,7 @@
 {
   "name": "velo-cashback-calculator",
   "version": "0.1.0",
-  "homepage": "https://RichForever.github.io/RentaWdowiaKalkulator",
+  "homepage": "https://RichForever.github.io/velobank-cashback-calculator",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
