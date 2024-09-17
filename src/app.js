@@ -145,6 +145,7 @@ function App() {
                   remainingSpendLimit,
                   setSelectedPayment,
                   transactions,
+                  setTransactions
                 }}>
                 <Transactions />
               </TransactionsContext.Provider>
