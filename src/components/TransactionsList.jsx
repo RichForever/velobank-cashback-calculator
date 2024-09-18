@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Flex, VStack, IconButton, Text, Tooltip, useColorModeValue, Box, HStack} from '@chakra-ui/react';
+import {Flex, VStack, IconButton, Text, Tooltip, useColorModeValue, Box, HStack, Divider} from '@chakra-ui/react';
 import {DeleteIcon, DragHandleIcon} from '@chakra-ui/icons';
 import { LOCALSTORAGE_KEY } from '../constants';
 import { useTransactionsContext } from '../context/TransactionsProvider';
@@ -34,6 +34,7 @@ const TransactionsList = () => {
   const textColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
   const cashbackValueColor = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent');
   const draggableIconColor = useColorModeValue('lightMode.border', 'darkMode.border');
+  const dividerColor = useColorModeValue('lightMode.border', 'darkMode.border')
 
   const dragVariants = {
     initial: {
@@ -50,7 +51,7 @@ const TransactionsList = () => {
     <Flex height='100%' alignItems={transactions.length > 0 ? 'flex-start' : 'center'} justifyContent='center' flex='1' overflowY='auto'>
       {transactions.length > 0 ? (
         <>
-          <VStack spacing={4} align='stretch' width='100%' as={Reorder.Group} axis='y' onReorder={setTransactions} values={transactions}>
+          <VStack spacing={4} align='stretch' width='100%' as={Reorder.Group} axis='y' onReorder={setTransactions} values={transactions} divider={<Divider borderColor={dividerColor} />}>
             {transactions.map((transaction) => (
               <Flex alignItems='center' justifyContent='space-between' gap={4} key={transaction.id} as={Reorder.Item} value={transaction} variants={dragVariants} initial="initial" whileDrag="dragging" position="relative">
                 <HStack gap={4}>
