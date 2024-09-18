@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/velobank-cashback-calculator/static/css/main.2ed9e98d.css",
-    "main.js": "/velobank-cashback-calculator/static/js/main.38c808eb.js",
+    "main.js": "/velobank-cashback-calculator/static/js/main.a44c2990.js",
     "static/media/red-hat-display-latin-800-normal.woff": "/velobank-cashback-calculator/static/media/red-hat-display-latin-800-normal.80db3c1c50190f346d37.woff",
     "static/media/red-hat-display-latin-700-normal.woff": "/velobank-cashback-calculator/static/media/red-hat-display-latin-700-normal.1c272fbd0629b1a2f3fa.woff",
     "static/media/red-hat-display-latin-500-normal.woff": "/velobank-cashback-calculator/static/media/red-hat-display-latin-500-normal.d75d5e4165ac15315006.woff",
@@ -32,10 +32,10 @@
     "static/media/red-hat-display-latin-ext-300-normal.woff2": "/velobank-cashback-calculator/static/media/red-hat-display-latin-ext-300-normal.4e2aea50b16452a40e3b.woff2",
     "index.html": "/velobank-cashback-calculator/index.html",
     "main.2ed9e98d.css.map": "/velobank-cashback-calculator/static/css/main.2ed9e98d.css.map",
-    "main.38c808eb.js.map": "/velobank-cashback-calculator/static/js/main.38c808eb.js.map"
+    "main.a44c2990.js.map": "/velobank-cashback-calculator/static/js/main.a44c2990.js.map"
   },
   "entrypoints": [
     "static/css/main.2ed9e98d.css",
-    "static/js/main.38c808eb.js"
+    "static/js/main.a44c2990.js"
   ]
 }
