@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { Box, Divider, VStack, useColorModeValue } from '@chakra-ui/react';
-import CalculatorHeading from './CalculatorHeading';
+
 import CalculatorDescription from './CalculatorDescription';
 import CalculatorForm from './CalculatorForm';
+import CalculatorHeading from './CalculatorHeading';
 
 const Calculator = () => {
   const dividerBorderColor = useColorModeValue('lightMode.border', 'darkMode.border');

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Box, Heading, Text, useColorModeValue } from '@chakra-ui/react';
 
 const CalculatorHeading = () => {

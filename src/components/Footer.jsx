@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 const Footer = ({ lastOperationDate }) => {

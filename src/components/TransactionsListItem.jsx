@@ -1,7 +1,9 @@
-import React from "react";
-import {Reorder, useDragControls} from "framer-motion";
-import {Box, Flex, HStack, IconButton, Text, Tooltip, useColorModeValue} from "@chakra-ui/react";
-import {DeleteIcon, DragHandleIcon} from "@chakra-ui/icons";
+import React from 'react';
+
+import { Reorder, useDragControls } from 'framer-motion';
+
+import { Box, Flex, HStack, IconButton, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { DeleteIcon, DragHandleIcon } from '@chakra-ui/icons';
 
 const TransactionsListItem = ({ transaction, onDelete }) => {
     const controls = useDragControls(); // Hook is called here in the subcomponent

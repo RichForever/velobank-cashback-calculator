@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
+
+import { Reorder } from 'framer-motion';
+import { Flex, VStack, Text, useColorModeValue, Divider } from '@chakra-ui/react';
+
 import { LOCALSTORAGE_KEY } from '../constants';
 import { useTransactionsContext } from '../context/TransactionsProvider';
-import { useValidObjectStructure } from '../hooks/useValidObjectStructure';
 import { useAppContext } from '../context/AppProvider';
-import {Reorder} from "framer-motion";
-import {Flex, VStack, Text, useColorModeValue, Divider} from '@chakra-ui/react';
-import TransactionsListItem from "./TransactionsListItem";
+import { useValidObjectStructure } from '../hooks/useValidObjectStructure';
+import TransactionsListItem from './TransactionsListItem';
+
 
 const TransactionsList = () => {
   const { setTransactions, transactions, setSelectedPayment, onDeleteOpen } = useTransactionsContext();

@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { Box, Button, FormControl, FormLabel, IconButton, Input, InputGroup, InputRightElement, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { SmallCloseIcon } from '@chakra-ui/icons';
+
 import { CASHBACK_PERCENTAGE_VALUE } from '../constants';
 import { useCalculatorContext } from '../context/CalculatorProvider';
 import { useAppContext } from '../context/AppProvider';
 import { useCurrentDate } from '../hooks/useCurrentDate';
-import { SmallCloseIcon } from '@chakra-ui/icons';
 
 const CalculatorForm = () => {
   const { setTransactions, transactions, accumulatedCashback, setAccumulatedCashback, errorAlertRef, remainingSpendLimit, setRemainingSpendLimit, transactionAmount, setTransactionAmount, formError, setFormError, setLastOperationDate } =

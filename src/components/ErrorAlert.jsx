@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Alert, AlertIcon, AlertTitle, CloseButton, Flex } from '@chakra-ui/react';
-import {useAppContext} from "../context/AppProvider";
+
+import { useAppContext } from '../context/AppProvider';
 
 const ErrorAlert = () => {
 

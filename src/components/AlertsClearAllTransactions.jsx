@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
+
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from '@chakra-ui/react';
+
 import { useAlertsContext } from '../context/AlertsProvider';
 import { useAppContext } from '../context/AppProvider';
 

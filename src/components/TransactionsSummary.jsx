@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+
 import { CASHBACK_MAX_VALUE } from '../constants';
-import { useTransactionsContext } from '../context/TransactionsProvider';
 import { useAppContext } from '../context/AppProvider';
+import { useTransactionsContext } from '../context/TransactionsProvider';
 
 const TransactionsSummary = () => {
   const { accumulatedCashback, remainingSpendLimit } = useTransactionsContext();
