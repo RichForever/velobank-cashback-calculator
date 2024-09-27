@@ -30,6 +30,7 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
             initial="initial"
             whileDrag="dragging"
             position="relative"
+            style={{ touchAction: "none" }}
         >
             <HStack gap={4}>
                 <Box className="reorder-handle" onPointerDown={(e) => controls.start(e)}>
