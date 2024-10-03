@@ -41,7 +41,7 @@ const TransactionsList = () => {
       {transactions.length > 0 ? (
         <>
 
-          <VStack spacing={4} align='stretch' width='100%' as={Reorder.Group} axis='y' onReorder={setTransactions} values={transactions} divider={<Divider borderColor={dividerColor} />}>
+          <VStack style={{ overflow: 'hidden' }} spacing={4} align='stretch' width='100%' as={Reorder.Group} axis='y' onReorder={setTransactions} values={transactions} divider={<Divider borderColor={dividerColor} />}>
             {transactions.map((transaction) => (
                 <TransactionsListItem key={transaction.id} transaction={transaction} onDelete={handleDeleteTransaction} />
             ))}
