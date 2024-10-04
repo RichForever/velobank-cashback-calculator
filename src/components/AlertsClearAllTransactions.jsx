@@ -9,6 +9,7 @@ const AlertsClearAllTransactions = () => {
   const { isOpen, onClose } = useAlertsContext();
   const { clearAllTransactions } = useAppContext();
   const cancelRef = useRef();
+
   const bg = useColorModeValue('white', 'darkMode.bgWrapperPrimary');
   const textColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
 

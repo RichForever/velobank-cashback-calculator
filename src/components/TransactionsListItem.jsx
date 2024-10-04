@@ -4,9 +4,17 @@ import { Reorder, useDragControls } from 'framer-motion';
 
 import { Box, Flex, HStack, IconButton, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { DeleteIcon, DragHandleIcon } from '@chakra-ui/icons';
+import {useCurrentDate} from "../hooks/useCurrentDate";
+import {useAppContext} from "../context/AppProvider";
 
 const TransactionsListItem = ({ transaction, onDelete }) => {
+
+    const [itemTooltipIsVisible, setItemTooltipIsVisible] = useState(false);
+
     const controls = useDragControls(); // Hook is called here in the subcomponent
+    const currentDate = useCurrentDate();
+
+    const { setLastOperationDate } = useAppContext();
 
     const dragVariants = {
         initial: { zIndex: 0, opacity: '100%' },
@@ -31,6 +39,7 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
             whileDrag="dragging"
             position="relative"
             style={{ touchAction: 'none' }}
+            onDragEnd={() => setLastOperationDate(currentDate)}
         >
             <HStack gap={4}>
                 <Box className="reorder-handle" onPointerDown={(e) => controls.start(e)}>
@@ -46,13 +55,18 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
                 </Box>
             </HStack>
             <Flex gap={4} align="stretch">
-                <Tooltip label="Usuń transakcję" placement="bottom-end">
+                <Tooltip label="Usuń transakcję" placement="bottom-end" isOpen={itemTooltipIsVisible}>
                     <IconButton
                         aria-label="Usuń transakcję"
                         icon={<DeleteIcon />}
                         colorScheme="red"
                         size="sm"
-                        onClick={() => onDelete(transaction)}
+                        onClick={() => {
+                            onDelete(transaction)
+                            setItemTooltipIsVisible(false)
+                        }}
+                        onMouseEnter={() => setItemTooltipIsVisible(true)}
+                        onMouseLeave={() => setItemTooltipIsVisible(false)}
                     />
                 </Tooltip>
             </Flex>

@@ -9,9 +9,9 @@ import { useAppContext } from '../context/AppProvider';
 import { useCurrentDate } from '../hooks/useCurrentDate';
 
 const CalculatorForm = () => {
-  const { setTransactions, transactions, accumulatedCashback, setAccumulatedCashback, errorAlertRef, remainingSpendLimit, setRemainingSpendLimit, transactionAmount, setTransactionAmount, formError, setFormError, setLastOperationDate } =
+  const { setTransactions, transactions, accumulatedCashback, setAccumulatedCashback, errorAlertRef, remainingSpendLimit, setRemainingSpendLimit, transactionAmount, setTransactionAmount, formError, setFormError } =
     useCalculatorContext();
-  const { showToast, isSmallScreen, inputRef } = useAppContext();
+  const { showToast, isSmallScreen, inputRef, setLastOperationDate } = useAppContext();
   const currentDate = useCurrentDate();
 
   const [showClear, setShowClear] = useState(false);
@@ -23,6 +23,7 @@ const CalculatorForm = () => {
     // Validate transaction amount
     if (!transactionAmount || isNaN(transactionInputValue) || transactionInputValue <= 0) {
       setFormError(true);
+      setLastOperationDate(currentDate)
       return;
     }
 
@@ -49,6 +50,9 @@ const CalculatorForm = () => {
 
     // Show toast notification for added transaction
     showToast('item-added-success', 'Transakcja dodana', 'info');
+
+    // Update operation date
+    setLastOperationDate(currentDate)
 
     // Clear transaction input field
     setTransactionAmount('');
@@ -98,17 +102,14 @@ const CalculatorForm = () => {
         block: 'center',
       });
     }
-  }, [formError, isSmallScreen]);
+  }, [formError, isSmallScreen, errorAlertRef]);
 
   // Reset input error when transactions change
   useEffect(() => {
     if (transactions.length > 0) {
       setFormError(false);
     }
-
-    // Set the last operation date
-    setLastOperationDate(currentDate);
-  }, [currentDate, transactions]);
+  }, [transactions, setFormError]);
 
   const inputBorderColor = useColorModeValue('lightMode.inputBorder', 'darkMode.inputBorder');
   const inputLabelColor = useColorModeValue('lightMode.text', 'darkMode.text');

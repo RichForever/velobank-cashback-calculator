@@ -13,12 +13,13 @@ import ErrorAlert from './components/ErrorAlert';
 
 import useToastNotification from './hooks/useShowToast';
 
+import { AppContext } from './context/AppProvider';
+import { AlertsContext } from './context/AlertsProvider';
 import { CalculatorContext } from './context/CalculatorProvider';
 import { TransactionsContext } from './context/TransactionsProvider';
-import { AlertsContext } from './context/AlertsProvider';
-import { AppContext } from './context/AppProvider';
 
 import { LOCALSTORAGE_KEY, CASHBACK_MAX_SPEND_VALUE } from './constants';
+import {useCurrentDate} from "./hooks/useCurrentDate";
 
 function App() {
   const [transactions, setTransactions] = useState(() => {
@@ -47,6 +48,8 @@ function App() {
   const inputRef = useRef(null); // Ref for the input element
   const errorAlertRef = useRef(null); // Ref for error alert
 
+  const currentDate = useCurrentDate();
+
   const { isOpen, onOpen, onClose } = useDisclosure(); // Disclosure for clear confirmation dialog
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure(); // Disclosure for delete confirmation dialog
 
@@ -61,8 +64,12 @@ function App() {
     setAccumulatedCashback(0);
     setRemainingSpendLimit(CASHBACK_MAX_SPEND_VALUE);
 
+
     onClose();
     showToast('clear-success', 'Lista wydatków została wyczyszczona.', 'info');
+
+    // Update operation date
+    setLastOperationDate(currentDate)
 
     if (isSmallScreen && inputRef.current) {
       inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -97,6 +104,7 @@ function App() {
           onDeleteClose,
           onDeleteOpen,
           remainingSpendLimit,
+          setLastOperationDate,
           setRemainingSpendLimit,
           selectedPayment,
           setSelectedPayment,
@@ -104,7 +112,7 @@ function App() {
           setTransactionAmount,
           transactions,
           setTransactions,
-          showToast,
+          showToast
         }}>
         <DarkModeToggle />
         <Flex width='100%' minHeight='100vh' alignItems='center' justifyContent='center' bg={mainBg} padding={6} direction='column'>
@@ -127,7 +135,6 @@ function App() {
                   errorAlertRef,
                   formError,
                   setFormError,
-                  setLastOperationDate,
                   remainingSpendLimit,
                   setRemainingSpendLimit,
                   transactionAmount,

@@ -4,16 +4,18 @@ import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, Al
 
 import { useAlertsContext } from '../context/AlertsProvider';
 import { useAppContext } from '../context/AppProvider';
+import { useCurrentDate } from '../hooks/useCurrentDate';
 
 const DeleteTransactionAlert = () => {
   const { isDeleteOpen, onDeleteClose } = useAlertsContext();
-  const { inputRef, isSmallScreen, selectedPayment, setSelectedPayment, setAccumulatedCashback, setRemainingSpendLimit, transactions, setTransactions, showToast } = useAppContext();
+  const { inputRef, isSmallScreen, selectedPayment, setSelectedPayment, setAccumulatedCashback, setRemainingSpendLimit, transactions, setTransactions, showToast, setLastOperationDate } = useAppContext();
   const cancelRef = useRef();
-
+  const currentDate = useCurrentDate();
   // Function to delete a transaction
   const deleteTransaction = () => {
     const { id, cashback, value } = selectedPayment;
     const updatedTransactions = transactions.filter((payment) => payment.id !== id);
+
 
     setTransactions(updatedTransactions);
 
@@ -27,6 +29,9 @@ const DeleteTransactionAlert = () => {
 
     // Show toast notification for deleted transaction
     showToast('item-deleted-success', 'Pozycja usunięta', 'info');
+
+    // Update operation date
+    setLastOperationDate(currentDate)
 
     // Refocus input field if not on small screen
     if (!isSmallScreen && inputRef.current) {
