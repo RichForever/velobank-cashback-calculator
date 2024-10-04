@@ -6,15 +6,23 @@ import { Box, Flex, HStack, IconButton, Text, Tooltip, useColorModeValue } from 
 import { DeleteIcon, DragHandleIcon } from '@chakra-ui/icons';
 import {useCurrentDate} from "../hooks/useCurrentDate";
 import {useAppContext} from "../context/AppProvider";
+import {useTransactionsContext} from "../context/TransactionsProvider";
 
 const TransactionsListItem = ({ transaction, onDelete }) => {
 
     const [itemTooltipIsVisible, setItemTooltipIsVisible] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const controls = useDragControls(); // Hook is called here in the subcomponent
     const currentDate = useCurrentDate();
 
     const { setLastOperationDate } = useAppContext();
+    const { transactions } = useTransactionsContext();
+
+    const isDraggable = transactions.length > 1;
+
+    // Dynamically set cursor style based on transaction count and dragging state
+    const cursorStyle = isDraggable ? (isDragging ? 'grabbing' : 'grab') : 'not-allowed';
 
     const dragVariants = {
         initial: { zIndex: 0, opacity: '100%' },
@@ -39,11 +47,15 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
             whileDrag="dragging"
             position="relative"
             style={{ touchAction: 'none' }}
-            onDragEnd={() => setLastOperationDate(currentDate)}
+            onDragEnd={() => {
+                setIsDragging(false)
+                setLastOperationDate(currentDate)
+            }}
+            onDragStart={() => setIsDragging(true)}
         >
             <HStack gap={4}>
-                <Box className="reorder-handle" onPointerDown={(e) => controls.start(e)}>
-                    <DragHandleIcon color={draggableIconColor} cursor="move" />
+                <Box className="reorder-handle" onPointerDown={(e) => isDraggable && controls.start(e)} style={{ cursor: cursorStyle }}>
+                    <DragHandleIcon color={draggableIconColor} />
                 </Box>
                 <Box>
                     <Text fontSize="lg" fontWeight="700">

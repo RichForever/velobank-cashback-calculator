@@ -7,6 +7,7 @@ import { LOCALSTORAGE_KEY } from '../constants';
 import { useTransactionsContext } from '../context/TransactionsProvider';
 import { useAppContext } from '../context/AppProvider';
 import { useValidObjectStructure } from '../hooks/useValidObjectStructure';
+
 import TransactionsListItem from './TransactionsListItem';
 
 
@@ -26,7 +27,7 @@ const TransactionsList = () => {
         showToast('storage-reset', 'Dane zapisane w pamięci podręcznej zostały zresetowane z powodu zmian w strukturze.', 'warning');
       }
     }
-  }, [hasValidObjectStructure, clearAllTransactions]);
+  }, [hasValidObjectStructure, clearAllTransactions, showToast]);
 
   const textColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
   const dividerColor = useColorModeValue('lightMode.border', 'darkMode.border')
