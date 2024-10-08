@@ -31,6 +31,7 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
 
     const draggableIconColor = useColorModeValue('lightMode.border', 'darkMode.border');
     const cashbackValueColor = useColorModeValue('lightMode.bgAccent', 'darkMode.bgAccent');
+    const transactionDateColor = useColorModeValue('lightMode.textSecondary', 'darkMode.textSecondary');
 
     return (
         <Flex
@@ -63,6 +64,9 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
                     </Text>
                     <Text fontSize="sm" color={cashbackValueColor} fontWeight="600">
                         {transaction.cashback.toFixed(2)} PLN
+                    </Text>
+                    <Text fontSize="xs" color={transactionDateColor} fontWeight="400" opacity="50%">
+                        Data transakcji: {transaction.date}
                     </Text>
                 </Box>
             </HStack>

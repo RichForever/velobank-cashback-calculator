@@ -38,6 +38,7 @@ const CalculatorForm = () => {
         id: Date.now(),
         value: parsedTransactionValue,
         cashback: calculatedCashback,
+        date: currentDate()
       },
     ]);
 
