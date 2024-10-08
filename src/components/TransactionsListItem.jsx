@@ -65,9 +65,11 @@ const TransactionsListItem = ({ transaction, onDelete }) => {
                     <Text fontSize="sm" color={cashbackValueColor} fontWeight="600">
                         {transaction.cashback.toFixed(2)} PLN
                     </Text>
-                    <Text fontSize="xs" color={transactionDateColor} fontWeight="400" opacity="50%">
-                        Data transakcji: {transaction.date}
-                    </Text>
+                    {transaction.date && (
+                        <Text fontSize="xs" color={transactionDateColor} fontWeight="400" opacity="50%">
+                            Data transakcji: {transaction.date}
+                        </Text>
+                    )}
                 </Box>
             </HStack>
             <Flex gap={4} align="stretch">
